@@ -13,36 +13,34 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://Jiangii.github.io/2024/05/10/github搭建个人博客1/"/>
+    <link rel="canonical" href="http://Jiangii.github.io/2024/06/12/搭建多节点高可用kubesphere/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="本人在大学里浑浑噩噩的过了四年，因为疫情封了3年，从2019年12月到2022年12月放开，可以说这个大学上的很没有体验啊。2023年毕业工作以后一直想搭一个自己的博客，把工作上学到的用到的记录下来，也算是见证了自己的成长，那么第一篇就从如何使用Github Pages 搭建个人博客开始吧o(￣▽￣)ブ 前言Github PagesGitHub Pages 是由 GitHub 官方提供的一种免费的">
+        <meta name="description" content="KubeSphere官方文档：https:&#x2F;&#x2F;kubesphere.io&#x2F;zh&#x2F;docs&#x2F;v3.4&#x2F;installing-on-linux&#x2F;high-availability-configurations&#x2F;internal-ha-configuration&#x2F;  环境准备Docker安装您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 D">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Github搭建个人博客（一）">
-<meta property="og:url" content="http://jiangii.github.io/2024/05/10/Github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A21/index.html">
+<meta property="og:title" content="阿一的学习笔记">
+<meta property="og:url" content="http://jiangii.github.io/2024/06/12/%E6%90%AD%E5%BB%BA%E5%A4%9A%E8%8A%82%E7%82%B9%E9%AB%98%E5%8F%AF%E7%94%A8KubeSphere/index.html">
 <meta property="og:site_name" content="阿一的学习笔记">
-<meta property="og:description" content="本人在大学里浑浑噩噩的过了四年，因为疫情封了3年，从2019年12月到2022年12月放开，可以说这个大学上的很没有体验啊。2023年毕业工作以后一直想搭一个自己的博客，把工作上学到的用到的记录下来，也算是见证了自己的成长，那么第一篇就从如何使用Github Pages 搭建个人博客开始吧o(￣▽￣)ブ 前言Github PagesGitHub Pages 是由 GitHub 官方提供的一种免费的">
+<meta property="og:description" content="KubeSphere官方文档：https:&#x2F;&#x2F;kubesphere.io&#x2F;zh&#x2F;docs&#x2F;v3.4&#x2F;installing-on-linux&#x2F;high-availability-configurations&#x2F;internal-ha-configuration&#x2F;  环境准备Docker安装您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 D">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://jiangii.github.io/graph/GitHub1.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/Github2.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/GitHub3.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/Github4.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/Github5.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/hexo1.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/hexo2.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/hexo3.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/hexo4.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/hexo5.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/hexo6.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/deploy.jpg">
-<meta property="og:image" content="http://jiangii.github.io/graph/myindex.jpg">
-<meta property="article:published_time" content="2024-05-10T06:47:29.039Z">
-<meta property="article:modified_time" content="2024-05-11T11:05:43.633Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717484165812-2473f6ef-d0a6-4ad6-a04c-44cc0c951f1b.png#averageHue=%23f6f6f6&clientId=u5303735a-8da3-4&from=paste&id=udf1fcfb3&originHeight=815&originWidth=1080&originalType=url&ratio=1.125&rotation=0&showTitle=false&size=175710&status=done&style=none&taskId=uf7327a43-1413-4eb0-b909-3fee7cfef32&title=">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717378190971-5c59d4cf-7af2-434c-9805-9480ec7cc54a.png#averageHue=%2338332e&clientId=u4b77f422-f21f-4&from=paste&height=178&id=mkldZ&originHeight=200&originWidth=556&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=24506&status=done&style=none&taskId=ud5bab20b-a77f-4e1e-8d37-764ca799715&title=&width=494.22222222222223">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717379257820-98107473-930d-4104-8a5f-3018b3867d30.png#averageHue=%232d2825&clientId=u4b77f422-f21f-4&from=paste&height=362&id=ufcbcc076&originHeight=407&originWidth=1099&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=74022&status=done&style=none&taskId=uad6d576d-08f2-4d91-a6be-d5e40cd67db&title=&width=976.8888888888889">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717381210457-c10e9aba-e3db-40bf-9f58-60137bc86d08.png#averageHue=%23262321&clientId=u4b77f422-f21f-4&from=paste&height=244&id=CX5WO&originHeight=274&originWidth=407&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=18347&status=done&style=none&taskId=u8e25e560-6514-4854-a2fd-f17b54d92d6&title=&width=361.77777777777777">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717408078535-02ae339f-c7de-4619-a50c-b1c373e66190.png#averageHue=%231d1d1c&clientId=u97dd61fa-e0a4-4&from=paste&height=618&id=eakog&originHeight=847&originWidth=502&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=21818&status=done&style=none&taskId=ue74db0ce-5110-4f58-b08e-2f1239c6038&title=&width=366.22222900390625">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717461860899-3e7f855d-dee2-463d-bf6d-c7bb3a1bb050.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=743&id=ub8d739cd&originHeight=836&originWidth=1156&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=89204&status=done&style=none&taskId=uce32f209-67ac-4589-ad35-7bd07f3fbeb&title=&width=1027.5555555555557">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462050308-a9f67c18-2784-4dd8-9b29-1f59ef937760.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=315&id=u7f5194cd&originHeight=354&originWidth=451&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=17123&status=done&style=none&taskId=ue1b4a48f-fed0-4930-9d98-c63d29b7d72&title=&width=400.8888888888889">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462144081-47cca6da-db80-48bd-9ef0-3042ffa6cccd.png#averageHue=%23201f1e&clientId=u466b5c74-7be6-4&from=paste&height=759&id=ub7775adb&originHeight=854&originWidth=1269&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=94688&status=done&style=none&taskId=u3981adc0-c8d9-49a9-9be9-7dd719c2ee0&title=&width=1128">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483569814-40ac670f-a761-45cd-b92e-81f609c67d0b.png#averageHue=%23222120&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=uf1a6b0de&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=99271&status=done&style=none&taskId=ufce2965e-a2f4-4cb9-b3f6-6b03c35c675&title=&width=1435.5555555555557">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483539099-0e41ac8c-7567-4feb-bad3-8f197c067ec4.png#averageHue=%23ecf1f6&clientId=ucfec1ca5-de20-4&from=paste&height=782&id=u47757bd6&originHeight=880&originWidth=1920&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=59129&status=done&style=none&taskId=u4897a86e-f06a-421f-87fc-3663eeb3c30&title=&width=1706.6666666666667">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483711945-871420d1-18e6-4cfc-95be-03a16e0d24ee.png#averageHue=%23242221&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=ucfd102b8&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=131296&status=done&style=none&taskId=ufe20d180-dd80-43b1-b3e5-4b12ec63dc6&title=&width=1435.5555555555557">
+<meta property="article:published_time" content="2024-06-12T10:33:19.944Z">
+<meta property="article:modified_time" content="2024-06-12T10:33:27.091Z">
 <meta property="article:author" content="阿一">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://jiangii.github.io/graph/GitHub1.jpg">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717484165812-2473f6ef-d0a6-4ad6-a04c-44cc0c951f1b.png#averageHue=%23f6f6f6&clientId=u5303735a-8da3-4&from=paste&id=udf1fcfb3&originHeight=815&originWidth=1080&originalType=url&ratio=1.125&rotation=0&showTitle=false&size=175710&status=done&style=none&taskId=uf7327a43-1413-4eb0-b909-3fee7cfef32&title=">
     
     
     <!--- Icon Part-->
@@ -53,8 +51,6 @@
     <!--- Page Info-->
     
     <title>
-        
-            Github搭建个人博客（一） -
         
         阿一的学习笔记
     </title>
@@ -447,7 +443,7 @@
         <div class="article-title relative w-full">
             
                 <div class="w-full flex items-center pt-6 justify-start">
-                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">Github搭建个人博客（一）</h1>
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3"></h1>
                 </div>
             
             </div>
@@ -468,15 +464,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-05-10 14:47:29</span>
-        <span class="mobile">2024-05-10 14:47:29</span>
+        <span class="desktop">2024-06-12 18:33:19</span>
+        <span class="mobile">2024-06-12 18:33:19</span>
         <span class="hover-info">创建</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-05-11 19:05:43</span>
-            <span class="mobile">2024-05-11 19:05:43</span>
+            <span class="desktop">2024-06-12 18:33:27</span>
+            <span class="mobile">2024-06-12 18:33:27</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -503,145 +499,81 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p>本人在大学里浑浑噩噩的过了四年，因为疫情封了3年，从2019年12月到2022年12月放开，可以说这个大学上的很没有体验啊。<br>2023年毕业工作以后一直想搭一个自己的博客，把工作上学到的用到的记录下来，也算是见证了自己的成长，那么第一篇就从如何使用Github Pages 搭建个人博客开始吧o(<em>￣▽￣</em>)ブ</p>
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><h3 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h3><p>GitHub Pages 是由 GitHub 官方提供的一种免费的静态站点托管服务，让我们可以在 GitHub 仓库里托管和发布自己的静态网站页面。</p>
-<h3 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h3><p>  有大佬将博客的功能（比如文章管理）抽象出来，做成了站点生成器 ，可以用极少的”命令” + “配置文件”的方式，自动生成精美的博客网站。主流的博客主要分静态博客和动态博客两类，所谓动态，就是指有前端有后端，可以登录到后台进行管理。静态博客是纯前端的展示，没有后端。</p>
-<ul>
-<li>动态博客生成器：WordPress、FarBox、Ghost等</li>
-<li>静态博客生成器：Hexo、Jekyll、Octopress、Hugo等</li>
-</ul>
-<blockquote>
-<p>Hexo是一个快速、简洁且高效的博客框架，用于创建和管理静态网站和博客，可以在几秒钟内从数百个文件生成静态网页<br>官网： <a class="link"   target="_blank" rel="noopener" href="https://hexo.io/" >hexo.io <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>官方详细部署文档： <a class="link"   target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/" >文档|hexo <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-</blockquote>
-<h2 id="准备GitHub"><a href="#准备GitHub" class="headerlink" title="准备GitHub"></a>准备GitHub</h2><h3 id="1-注册Github"><a href="#1-注册Github" class="headerlink" title="1.注册Github"></a>1.注册Github</h3><p>首先注册一个自己的Github账户 <a class="link"   target="_blank" rel="noopener" href="https://github.com/" >官网 | Github <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<blockquote>
-<p>如果Github界面打不开，请自行开启梯子</p>
-</blockquote>
-<h3 id="创建Github仓库"><a href="#创建Github仓库" class="headerlink" title="创建Github仓库"></a>创建Github仓库</h3><p>注册之后，接下来创建自己的仓库</p>
-<ul>
-<li><p>首先点击[New]<br><img  
+            <p>KubeSphere官方文档：<a class="link"   target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/" >https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../graph/GitHub1.jpg"
-                      alt="图片"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717484165812-2473f6ef-d0a6-4ad6-a04c-44cc0c951f1b.png#averageHue=%23f6f6f6&clientId=u5303735a-8da3-4&from=paste&id=udf1fcfb3&originHeight=815&originWidth=1080&originalType=url&ratio=1.125&rotation=0&showTitle=false&size=175710&status=done&style=none&taskId=uf7327a43-1413-4eb0-b909-3fee7cfef32&title="
+                      alt="image.png"
                 ></p>
-</li>
-<li><p>然后创建仓库时，仓库名一定要以[你的用户名].github.io 为名<br><img  
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><h3 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h3><p>您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 Docker。或者，您也可以在创建集群前手动安装 Docker 或其他容器运行时。</p>
+<h3 id="依赖项准备"><a href="#依赖项准备" class="headerlink" title="依赖项准备"></a>依赖项准备</h3><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export KKZONE=cn</span><br><span class="line"></span><br><span class="line">#准备所需依赖环境</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install conntrack socat chrony ipset ebtables</span><br></pre></td></tr></table></figure></div>
+<p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../graph/Github2.jpg"
-                      alt="图片"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717378190971-5c59d4cf-7af2-434c-9805-9480ec7cc54a.png#averageHue=%2338332e&clientId=u4b77f422-f21f-4&from=paste&height=178&id=mkldZ&originHeight=200&originWidth=556&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=24506&status=done&style=none&taskId=ud5bab20b-a77f-4e1e-8d37-764ca799715&title=&width=494.22222222222223"
+                      alt="image.png"
+                ><br>:::info<br>当sudo apt-get update报错<br>:::<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717379257820-98107473-930d-4104-8a5f-3018b3867d30.png#averageHue=%232d2825&clientId=u4b77f422-f21f-4&from=paste&height=362&id=ufcbcc076&originHeight=407&originWidth=1099&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=74022&status=done&style=none&taskId=uad6d576d-08f2-4d91-a6be-d5e40cd67db&title=&width=976.8888888888889"
+                      alt="image.png"
+                ><br>搜索了一下，大多数回答是说镜像错了，需要换镜像，但是测试后发现还是错误的，经过调研，发现那些回答都有问题，只是说要换源，没有说明镜像源要和系统版本一致，所以导致换了他们的源后还是错误的：<br>      例如：输入指令lsb_release -a 查看ubuntu的系统版本，在这里我的系统是22.04.3 LTS，注意后面的jammy这一个版本非常重要。<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717381210457-c10e9aba-e3db-40bf-9f58-60137bc86d08.png#averageHue=%23262321&clientId=u4b77f422-f21f-4&from=paste&height=244&id=CX5WO&originHeight=274&originWidth=407&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=18347&status=done&style=none&taskId=u8e25e560-6514-4854-a2fd-f17b54d92d6&title=&width=361.77777777777777"
+                      alt="image.png"
+                ><br>查看阿里的镜像网站<a class="link"   target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/ubuntu" >https://developer.aliyun.com/mirror/ubuntu <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，发现有三个不一样的源，所以failed to fetch的 原因是镜像源和系统版本对不上 ，所以出现下载错误。<br>编辑相关配置内容vim &#x2F;etc&#x2F;apt&#x2F;sources.list，更换源，一定要选择与Codename对应的源地址</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure></div>
+<p>若是还不行，添加Google 提供的公共 DNS 服务器的 IP 地址 8.8.8.8。<br>直接在 &#x2F;etc&#x2F;resolv.conf 文件后面追加命令（修改文件 sudo vi &#x2F;etc&#x2F;resolv.conf）</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;nameserver 8.8.8.8&quot; &gt;&gt; /etc/resolv.conf</span><br><span class="line">echo &quot;nameserver 114.114.114.114&quot; &gt;&gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /etc/apt/run.sh  </span><br><span class="line">/etc/apt/run.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 114.114.114.114&quot;</span> &gt;&gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="下载KubeKey"><a href="#下载KubeKey" class="headerlink" title="下载KubeKey"></a>下载KubeKey</h2><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(Ubuntu把sh换为bash)</span><br><span class="line">curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 sh -</span><br><span class="line">curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 bash -</span><br><span class="line"></span><br><span class="line">chmod +x kk</span><br></pre></td></tr></table></figure></div>
+
+<h2 id="创建集群"><a href="#创建集群" class="headerlink" title="创建集群"></a>创建集群</h2><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 查看版本</span><br><span class="line">./kk version --show-supported-k8s</span><br><span class="line"></span><br><span class="line"># 创建配置文件</span><br><span class="line">./kk create config --with-kubesphere v3.4.1 --with-kubernetes v1.23.10</span><br><span class="line"></span><br><span class="line"># 开始安装（多节点）</span><br><span class="line">./kk create cluster -f config-sample.yaml</span><br><span class="line"></span><br><span class="line"># 单节点直接启动这个./kk create cluster --with-kubernetes v1.23.10 --with-kubesphere v3.4.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 瞅瞅日志先啦</span><br><span class="line">kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l &#x27;app in (ks-install, ks-installer)&#x27; -o jsonpath=&#x27;&#123;.items[0].metadata.name&#125;&#x27;) -f</span><br><span class="line"></span><br><span class="line"># 之前超时的错误看到是443端口超时</span><br><span class="line">ufw status</span><br><span class="line">ufw allow 443</span><br></pre></td></tr></table></figure></div>
+<p>:::info</p>
+<ul>
+<li>安装 KubeSphere 3.4 的建议 Kubernetes 版本：v1.20.x、v1.21.x、v1.22.x、v1.23.x、* v1.24.x、* v1.25.x 和 * v1.26.x。带星号的版本可能出现边缘节点部分功能不可用的情况。因此，如需使用边缘节点，推荐安装 v1.23.x。如果不指定 Kubernetes 版本，KubeKey 将默认安装 Kubernetes v1.23.10。</li>
+<li>如果您在这一步的命令中不添加标志 –with-kubesphere，则不会部署 KubeSphere，只能使用配置文件中的 addons 字段安装，或者在您后续使用 .&#x2F;kk create cluster 命令时再次添加这个标志。</li>
+<li>如果您添加标志 –with-kubesphere 时不指定 KubeSphere 版本，则会安装最新版本的 KubeSphere。<br>:::<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717408078535-02ae339f-c7de-4619-a50c-b1c373e66190.png#averageHue=%231d1d1c&clientId=u97dd61fa-e0a4-4&from=paste&height=618&id=eakog&originHeight=847&originWidth=502&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=21818&status=done&style=none&taskId=ue74db0ce-5110-4f58-b08e-2f1239c6038&title=&width=366.22222900390625"
+                      alt="image.png"
                 ><br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../graph/GitHub3.jpg"
-                      alt="图片"
-                ></p>
-</li>
-<li><p>创建成功后，可以在仓库项目[Settings]查看相关设置，如果名字一开始没有按照格式设置，可以重新修改<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/Github4.jpg"
-                      alt="图片"
-                ></p>
-</li>
-<li><p>访问我们的默认界面（用户名.github.io）<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/Github5.jpg"
-                      alt="图片"
-                ></p>
-</li>
-</ul>
-<h2 id="本地构建Hexo"><a href="#本地构建Hexo" class="headerlink" title="本地构建Hexo"></a>本地构建Hexo</h2><p>官方详细部署文档： <a class="link"   target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/" >文档|hexo <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
-<h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><ol>
-<li>进入<a class="link"   target="_blank" rel="noopener" href="https://nodejs.org/en/download" >node.js <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>官网，下载exe安装包</li>
-<li>双击安装包，默认点击下一步进行安装（确保勾选Add to PATH选项）</li>
-<li>安装成功后进入终端输入npm –version显示版本号则说明安装成功</li>
-</ol>
-<h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><ol>
-<li>进入<a class="link"   target="_blank" rel="noopener" href="https://git-scm.com/download/win" >git <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>官网，下载exe安装包</li>
-<li>双击安装包，默认点击下一步进行安装（确保勾选Add to PATH选项）</li>
-<li>安装成功后进入终端输入git –version显示版本号则说明安装成功</li>
-</ol>
-<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>所有必备的应用程序安装完成后，即可使用 npm 安装 Hexo</p>
-<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure></div>
-<p>进阶安装和使用<br>对于熟悉 npm 的进阶用户，可以仅局部安装 hexo 包</p>
-<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo</span><br></pre></td></tr></table></figure></div>
-<p>安装以后，可以使用以下两种方式执行 Hexo：</p>
-<blockquote>
-<ol>
-<li>npx hexo 命令</li>
-<li>Linux 用户可以将 Hexo 所在的目录下的 node_modules 添加到环境变量之中即可直接使用 hexo <command><br>echo ‘PATH&#x3D;”$PATH:.&#x2F;node_modules&#x2F;.bin”‘ &gt;&gt; ~&#x2F;.profile<br>安装成功后输入hexo –version显示版本号则说明安装成功</li>
-</ol>
-</blockquote>
-<h2 id="Hexo项目部署到Github-Pages"><a href="#Hexo项目部署到Github-Pages" class="headerlink" title="Hexo项目部署到Github Pages"></a>Hexo项目部署到Github Pages</h2><h3 id="初始化hexo"><a href="#初始化hexo" class="headerlink" title="初始化hexo"></a>初始化hexo</h3><ul>
-<li>在本地新建一个文件夹 e:&#x2F;hexo，进入终端，在目标目录下输入以下命令<br>右击文件夹，open Git Bash here<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/hexo1.jpg"
-                      alt="图片"
-                ></li>
-</ul>
-<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npx hexo init</span><br></pre></td></tr></table></figure></div>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/hexo2.jpg"
-                      alt="图片"
-                ></p>
-<ul>
-<li>构建完成后，目录结构如下（）<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/hexo3.jpg"
-                      alt="图片"
-                ></li>
-</ul>
-<h3 id="预览效果"><a href="#预览效果" class="headerlink" title="预览效果"></a>预览效果</h3><p>hexo的相关命令可以自行学习</p>
-<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ npx hexo clean  <span class="comment">#清除缓存</span></span><br><span class="line">$ npx hexo generate 简写 npx hexo g  <span class="comment">#生成页面</span></span><br><span class="line">$ npx hexo server 简写 npx hexo s  <span class="comment">#启动服务</span></span><br><span class="line">$ npx hexo deploy 简写 npx hexo d  <span class="comment">#部署</span></span><br><span class="line">$ ...</span><br></pre></td></tr></table></figure></div>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/hexo4.jpg"
-                      alt="图片"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717461860899-3e7f855d-dee2-463d-bf6d-c7bb3a1bb050.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=743&id=ub8d739cd&originHeight=836&originWidth=1156&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=89204&status=done&style=none&taskId=uce32f209-67ac-4589-ad35-7bd07f3fbeb&title=&width=1027.5555555555557"
+                      alt="image.png"
                 ><br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../graph/hexo5.jpg"
-                      alt="图片"
-                ></p>
-<h3 id="部署到Github"><a href="#部署到Github" class="headerlink" title="部署到Github"></a>部署到Github</h3><ul>
-<li><p>安装git提交依赖</p>
-<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure></div>
-</li>
-<li><p>修改_config.yml文件中deploy和url配置项，写入以下内容<br><img  
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462050308-a9f67c18-2784-4dd8-9b29-1f59ef937760.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=315&id=u7f5194cd&originHeight=354&originWidth=451&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=17123&status=done&style=none&taskId=ue1b4a48f-fed0-4930-9d98-c63d29b7d72&title=&width=400.8888888888889"
+                      alt="image.png"
+                ><br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../graph/hexo6.jpg"
-                      alt="图片"
-                ></p>
-</li>
-<li><p>本地连接Github</p>
-</li>
-<li><p>提交到Github</p>
-<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npx hexo d -g</span><br></pre></td></tr></table></figure></div>
-<p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/deploy.jpg"
-                      alt="图片"
-                ></p>
-</li>
-<li><p>访问username.github.io查看个人博客网站<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../graph/myindex.jpg"
-                      alt="图片"
-                ></p>
-</li>
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462144081-47cca6da-db80-48bd-9ef0-3042ffa6cccd.png#averageHue=%23201f1e&clientId=u466b5c74-7be6-4&from=paste&height=759&id=ub7775adb&originHeight=854&originWidth=1269&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=94688&status=done&style=none&taskId=u3981adc0-c8d9-49a9-9be9-7dd719c2ee0&title=&width=1128"
+                      alt="image.png"
+                ></li>
 </ul>
-<h2 id="写在后面"><a href="#写在后面" class="headerlink" title="写在后面"></a>写在后面</h2><p>关于Hexo如何使用,以及如何个性化自己的博客网站,请看下一篇文章</p>
+<p>报错<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483569814-40ac670f-a761-45cd-b92e-81f609c67d0b.png#averageHue=%23222120&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=uf1a6b0de&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=99271&status=done&style=none&taskId=ufce2965e-a2f4-4cb9-b3f6-6b03c35c675&title=&width=1435.5555555555557"
+                      alt="image.png"
+                ><br>也能进去，但是登录报错<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483539099-0e41ac8c-7567-4feb-bad3-8f197c067ec4.png#averageHue=%23ecf1f6&clientId=ucfec1ca5-de20-4&from=paste&height=782&id=u47757bd6&originHeight=880&originWidth=1920&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=59129&status=done&style=none&taskId=u4897a86e-f06a-421f-87fc-3663eeb3c30&title=&width=1706.6666666666667"
+                      alt="image.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483711945-871420d1-18e6-4cfc-95be-03a16e0d24ee.png#averageHue=%23242221&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=ucfd102b8&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=131296&status=done&style=none&taskId=ufe20d180-dd80-43b1-b3e5-4b12ec63dc6&title=&width=1435.5555555555557"
+                      alt="image.png"
+                ></p>
+<p>编辑coredns配置<br>kubectl get configmap coredns -n kube-system -o yaml<br>kubectl edit cm coredns -n kube-system<br>重启server<br>kubectl -n kubesphere-system rollout restart deploy&#x2F;ks-apiserver</p>
 
         </div>
 
@@ -649,18 +581,18 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>标题:</strong> Github搭建个人博客（一）</li>
+        <li><strong>标题:</strong> </li>
         <li><strong>作者:</strong> 阿一</li>
         <li><strong>创建于
-                :</strong> 2024-05-10 14:47:29</li>
+                :</strong> 2024-06-12 18:33:19</li>
         
             <li>
                 <strong>更新于
-                    :</strong> 2024-05-11 19:05:43
+                    :</strong> 2024-06-12 18:33:27
             </li>
         
         <li>
-            <strong>链接:</strong> https://jiangii.github.io/2024/05/10/Github搭建个人博客1/
+            <strong>链接:</strong> https://jiangii.github.io/2024/06/12/搭建多节点高可用KubeSphere/
         </li>
         <li>
             <strong>
@@ -685,21 +617,21 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/05/11/Github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A22/"
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/05/26/Docker%E6%90%AD%E5%BB%BAELKB/"
                         >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Github搭建个人博客（二）</span>
-                                <span class="post-nav-item">上一篇</span>
+                                <span class="post-nav-title-item">Docker搭建ELKB</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
                             </span>
                         </a>
                     </div>
-                
                 
             </div>
         
@@ -755,8 +687,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">此页目录</div>
-        <div class="page-title">Github搭建个人博客（一）</div>
-        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Github-Pages"><span class="nav-text">Github Pages</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hexo"><span class="nav-text">Hexo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%87%86%E5%A4%87GitHub"><span class="nav-text">准备GitHub</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B3%A8%E5%86%8CGithub"><span class="nav-text">1.注册Github</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BAGithub%E4%BB%93%E5%BA%93"><span class="nav-text">创建Github仓库</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%AC%E5%9C%B0%E6%9E%84%E5%BB%BAHexo"><span class="nav-text">本地构建Hexo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Node-js"><span class="nav-text">安装Node.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Git"><span class="nav-text">安装Git</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Hexo"><span class="nav-text">安装Hexo</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo%E9%A1%B9%E7%9B%AE%E9%83%A8%E7%BD%B2%E5%88%B0Github-Pages"><span class="nav-text">Hexo项目部署到Github Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96hexo"><span class="nav-text">初始化hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%A2%84%E8%A7%88%E6%95%88%E6%9E%9C"><span class="nav-text">预览效果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E5%88%B0Github"><span class="nav-text">部署到Github</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%99%E5%9C%A8%E5%90%8E%E9%9D%A2"><span class="nav-text">写在后面</span></a></li></ol>
+        <div class="page-title"></div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-text">环境准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Docker%E5%AE%89%E8%A3%85"><span class="nav-text">Docker安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E9%A1%B9%E5%87%86%E5%A4%87"><span class="nav-text">依赖项准备</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDKubeKey"><span class="nav-text">下载KubeKey</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E9%9B%86%E7%BE%A4"><span class="nav-text">创建集群</span></a></li></ol>
 
     </div>
 </div>
