@@ -248,152 +248,992 @@
 
 
 <body>
-@import '../common/variables'
+<div class="progress-bar-container">
+    
 
-.page-container
-  position relative
-  box-sizing border-box
-  width 100%
-  height auto
-  background var(--background-color)
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
 
-  +redefine-tablet()
-    padding-right 0 !important
 
-  .main-content-container
-    padding-top $navbar-height
-    position relative
-    transition padding 0.2s ease
+<main class="page-container" id="swup">
 
-    .navbar-shrink &
-      padding-top $navbar-shrink-height
-      transition padding 0.2s ease
+    
+        
+    <style>
+        .home-banner-container {
+            background: none !important;
+        }
+        .home-article-item,
+        .sidebar-links,
+        .sidebar-content,
+        a.page-number,
+        a.extend,
+        .sidebar-links .links:hover,
+        .right-bottom-tools,
+        footer.footer {
+            background-color: var(--background-color-transparent-80) !important;
+        }
+        .right-bottom-tools:hover,
+        a.page-number:hover,
+        a.extend:hover {
+            background-color: var(--primary-color) !important;
+        }
+        .site-info,
+        .home-article-sticky-label {
+            background-color: var(--background-color-transparent-15) !important;
+        }
+        .home-article-sticky-label {
+            backdrop-filter: none !important;
+        }
+    </style>
+    <div class="home-banner-background transition-fade fixed top-0 left-0 w-screen h-screen scale-125 sm:scale-110 box-border will-change-transform bg-cover">
+        <img src="/images/wallhaven-wqery6-light.webp" alt="home-banner-background" class="w-full h-full object-cover dark:hidden">
+        <img src="/images/wallhaven-wqery6-dark.webp" alt="home-banner-background" class="w-full h-full object-cover hidden dark:block">
+    </div>
 
-      +redefine-tablet()
-        padding-top: ($navbar-shrink-height * 0.9)
 
-      +redefine-mobile()
-        padding-top: $navbar-shrink-height * 0.8
+<div class="home-banner-container flex justify-center items-center transition-fade relative">
+    
+    <div class="content mt-8 flex flex-col justify-center items-center">
+        <div class="description flex flex-col justify-center items-center w-screen font-medium text-center"
+        
+        >
+            阿一的学习笔记
+            
+            
+                <p><i id="subtitle"></i></p>
+            
+        </div>
+        
+            
+            <div class="absolute bottom-0.5 flex flex-row justify-between max-w-[1340px] items-center w-full px-8 sm:px-12">
+                <div class="flex p-3 bg-gray-300/50 dark:bg-gray-500/40 backdrop-blur-lg border border-white/20 dark:border-gray-500/30 group rounded-full cursor-pointer flex justify-center items-center aspect-square h-full shadow-redefine-flat hover:shadow-redefine-flat-hover transition-shadow" onclick="scrollToMain()" >
+                    <i class="fa-solid fa-arrow-down fa-fw fa-lg group-hover:translate-y-1 transition-transform"></i>
+                </div>
+                <div class="social-contacts px-6 py-3 bg-gray-300/50 dark:bg-gray-500/40 backdrop-blur-lg border border-white/20 dark:border-gray-500/30 shadow-redefine-flat rounded-full flex flex-row gap-3 items-center">
+                    
+                        
+                            
+                                <span class="social-contact-item github">
+                                    <a target="_blank" href="https://jiangii.github.io/">
+                                        <i class="fa-brands fa-fw fa-lg fa-github"></i>
+                                    </a>
+                                </span>
+                            
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                    
+                        
+                            
+                                <span class="social-contact-item email ">
+                                    <a href="mailto:3084498143@qq.com">
+                                        <i class="fa-solid fa-fw fa-at fa-lg"></i>
+                                    </a>
+                                </span>
+                            
+                        
+                    
+                    
+                </div>
+            </div>
+        
+    </div>
+    <script>
+        const scrollToMain = ()=> {
+            console.log('scroll');
+            const target = document.querySelector('.main-content-container');
+            target.scrollIntoView({ behavior: 'smooth'});
+        }
+    </script>
+</div>
+    
 
-    +redefine-tablet()
-      padding-top: $navbar-height * 0.9
+    <div class="main-content-container">
 
-    +redefine-mobile()
-      padding-top: $navbar-height * 0.8
 
-    .main-content-header
-      position fixed
-      top 0
-      right 0
-      width 100%
-      height $navbar-height
-      z-index $z-index-5
-      box-sizing border-box
-      transition-t('transform, padding-left, height', '0, 0, 0', '0.3, 0.2, 0.2', 'ease-out, linear, ease')
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
 
-      &.hide
-        transform translateY(-105%)
+    <div class="navbar-content has-home-banner">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                <h1>
+                阿一的学习笔记
+                </h1>
+            </a>
+        </div>
 
-      .navbar-shrink &
-        height $navbar-shrink-height
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
 
-        +redefine-tablet()
-          height: ($navbar-shrink-height * 0.9)
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class="active"
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
 
-        +redefine-mobile()
-          height: $navbar-shrink-height * 0.8
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
 
-      +redefine-tablet()
-        height: $navbar-height * 0.9
-        padding-left 0 !important
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
 
-      +redefine-mobile()
-        height: $navbar-height * 0.8
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    .main-content-body
-      box-sizing border-box
-      width 100%
-      display flex
-      justify-content center
-      padding $spacing-unit 0
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
 
-      +redefine-tablet()
-        padding ($spacing-unit * 0.8) 0
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full active"
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
 
-      +redefine-mobile()
-        border none !important
-        padding-top 0
+                        
+                    </li>
+            
+                
+                    
 
-      .main-content
-        position relative
-        box-sizing border-box
-        width $main-content-width
-        max-width $content-max-width
-        height 100%
-        transition-t('max-width, width', '0, 0', '0.2, 0.2', 'ease, ease')
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
 
-        +redefine-tablet()
-          width $main-content-width-tablet
+                        
+                    </li>
+            
 
-        +redefine-mobile()
-          width $main-content-width-mobile
+            
+            
+                
+                    
+            
+        </ul>
 
-        &.has-toc
-          max-width $has-toc-content-max-width !important
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
 
-      .main-content-footer
-        width 100%
+    <div class="window-mask"></div>
 
-  .post-tools
-    position fixed
-    top: $navbar-height + $spacing-unit
-    right $spacing-unit
-    transition-t('top', '0', '0.2', 'ease')
+</header>
 
-    .navbar-shrink &
-      top: $navbar-shrink-height + $spacing-unit
 
-      +redefine-tablet()
-        top ($navbar-shrink-height * 0.9) + $spacing-unit
+        </div>
 
-      +redefine-mobile()
-        top: ($navbar-shrink-height * 0.8 + $spacing-unit)
+        <div class="main-content-body">
 
-    +redefine-tablet()
-      top: ($navbar-height * 0.9 + $spacing-unit)
-      right 10px
-      transform scale(0.82)
-      transform-origin right top
+            
+                <div class="home-sidebar-container">
+    <div class="sticky-container sticky">
+        
+        
+            <div class="sidebar-content">
+                <div class="avatar flex justify-center">
+    <img src="https://github.com/Jiangii.png">
+</div>
+                <div class="author flex flex-col justify-center my-2.5 mx-0">
+    <div class="name">阿一</div>
+    
+        <div class="label">Lv2</div>
+    
+</div>
+                <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+            </div>
+            
+                <div class="sidebar-links"   marginTop >
+                    <div class="site-info">
+                        <div class="site-name">阿一的学习笔记</div>
+                        
+                            <div class="announcement">
+                                祝你我年少有为
+                            </div>
+                        
+                    </div>
+                    
+                        
+                            
+                                <a class="links" href="/archives">
+                                    
+                                        <i class="fa-regular fa-archive icon-space"></i>
+                                    
+                                    <span class="link-name">Archives</span>
+                                </a>
+                            
+                        
+                    
+                </div>
+            
+        
 
-    +redefine-mobile()
-      display none
-      top: ($navbar-height * 0.8 + $spacing-unit)
-      right 5px
-      transform scale(0.72)
+    </div>
+</div>
 
-  .right-side-tools-container
-    position fixed
-    bottom 5%
-    right $spacing-unit
-    opacity 1
-    transition opacity 0.2s ease
+            
 
-    &.hide
-      opacity 0
-      pointer-events none
-      transition opacity 0.2s ease
+            <div class="main-content">
 
-    +redefine-mobile()
-      right 12px
+                
+                    <div class="home-content-container">
+    <ul class="home-article-list">
+        
+            <li class="home-article-item">
 
-.transition-fade
-  transition 0.4s
-  opacity 1
+                
 
-html.is-animating
-  .transition-fade
-    opacity 0
-    transition 0.4s
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/06/14/Mysql%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A%E8%BF%81%E7%A7%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%87%B4%E5%8F%A6%E4%B8%80%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/">
+                            
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            Mysql数据库：迁移数据库致另一台服务器概述最近由于项目需要，我们需要进行数据库服务器的更换和迁移工作。迁移计划和步骤如下：
+1、首先，在新的数据库服务器上进行环境的搭建和配置，确保数据库版本、配置等一致。
+2、然后，将备份的数据库数据导入到新服务...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Fri Jun 14 2024 17:39:21 GMT+0800">
+                
+                    2024-06-14
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/06/14/Mysql%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A%E8%BF%81%E7%A7%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%87%B4%E5%8F%A6%E4%B8%80%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/">阅读全文<span class="seo-reader-text"></span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/06/12/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6(PowerJob%E4%B8%8Exxl-job%E5%AF%B9%E6%AF%94)/">
+                            分布式任务调度框架(PowerJob与xxl-job对比)
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            PowerJob 是新一代分布式 任务调度与计算框架，支持 CRON、API、固定频率、固定延迟等调度策略，提供工作流来编排任务解决依赖关系，能让您轻松完成作业的调度与繁杂任务的分布式计算。
+为什么选择 PowerJob？当前市面上流行的作业调度框架...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Wed Jun 12 2024 18:44:00 GMT+0800">
+                
+                    2024-06-12
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/06/12/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6(PowerJob%E4%B8%8Exxl-job%E5%AF%B9%E6%AF%94)/">阅读全文<span class="seo-reader-text">分布式任务调度框架(PowerJob与xxl-job对比)</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/06/12/%E6%90%AD%E5%BB%BA%E5%A4%9A%E8%8A%82%E7%82%B9%E9%AB%98%E5%8F%AF%E7%94%A8KubeSphere/">
+                            Linux搭建多节点高可用KubeSphere
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            KubeSphere官方文档：https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configurat...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Wed Jun 12 2024 18:33:19 GMT+0800">
+                
+                    2024-06-12
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/06/12/%E6%90%AD%E5%BB%BA%E5%A4%9A%E8%8A%82%E7%82%B9%E9%AB%98%E5%8F%AF%E7%94%A8KubeSphere/">阅读全文<span class="seo-reader-text">Linux搭建多节点高可用KubeSphere</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/26/Docker%E6%90%AD%E5%BB%BAELKB/">
+                            Docker搭建ELKB
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            版本：7.6.2
+
+注意事项：
+logstash映射出来的data文件需要有写入权限，可通过以下命令来实现chmod 777 &#x2F;mydata&#x2F;*
+logstash的配置文件要求使用UTF-8编码方式，否则可能启动失败
+
+
+ELKB...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Sun May 26 2024 17:39:17 GMT+0800">
+                
+                    2024-05-26
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/26/Docker%E6%90%AD%E5%BB%BAELKB/">阅读全文<span class="seo-reader-text">Docker搭建ELKB</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/26/%EF%BC%88%E9%A6%96%E9%80%89%EF%BC%89Docker%20Compose%E6%90%AD%E5%BB%BAELKB/">
+                            (首选)Docker Compose搭建ELKB
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            ELK版本：7.6.2
+
+注意事项：
+es映射出来的data文件需要有写入权限，可通过以下命令来实现chmod 777 &#x2F;mydata&#x2F;*
+logstash的配置文件要求使用UTF-8编码方式，否则可能启动失败
+本次搭建将每个模块...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Sun May 26 2024 17:39:09 GMT+0800">
+                
+                    2024-05-26
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/26/%EF%BC%88%E9%A6%96%E9%80%89%EF%BC%89Docker%20Compose%E6%90%AD%E5%BB%BAELKB/">阅读全文<span class="seo-reader-text">(首选)Docker Compose搭建ELKB</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/26/Docker%E9%83%A8%E7%BD%B2Skywalking/">
+                            Docker部署Skywalking
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            SkyWalking 三个核⼼部分
+Skywolking Agent：Agent 运⾏在各个服务实例中，负责采集服务实例的 Trace 、Metrics 等数据，然后通过 gRPC ⽅式上报给 SkyWalking 后端。Skywolking OAP...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Sun May 26 2024 16:11:38 GMT+0800">
+                
+                    2024-05-26
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/26/Docker%E9%83%A8%E7%BD%B2Skywalking/">阅读全文<span class="seo-reader-text">Docker部署Skywalking</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/25/Docker%E5%AE%89%E8%A3%85/">
+                            Docker安装
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            检查并卸载旧Docker版本1apt-get remove docker docker-engine docker.io containerd runc
+
+Docker更新包管理器1sudo apt-get update
+运行以上命令以确保Ubunt...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Sat May 25 2024 20:00:24 GMT+0800">
+                
+                    2024-05-25
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/25/Docker%E5%AE%89%E8%A3%85/">阅读全文<span class="seo-reader-text">Docker安装</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/25/Docker%E9%83%A8%E7%BD%B2jar%E5%8C%85%E5%BA%94%E7%94%A8/">
+                            Docker部署jar包应用
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            用户自定义网桥创建用户自定义网络之前查看网络信息
+默认有三种网桥，小伙伴们可以自行去了解
+
+1docker network ls
+
+创建用户自定义网络
+docker启动容器时默认在bridge
+
+123456docker network create...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Sat May 25 2024 20:00:14 GMT+0800">
+                
+                    2024-05-25
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/25/Docker%E9%83%A8%E7%BD%B2jar%E5%8C%85%E5%BA%94%E7%94%A8/">阅读全文<span class="seo-reader-text">Docker部署jar包应用</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/14/Docker%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/">
+                            Docker搭建Prometheus监控体系
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            
+
+
+修订内容
+版本号
+发布日期
+作者
+
+
+
+第一版发布
+
+
+Alan
+
+
+1. 部署Prometheus
+Prometheus是一个开源的系统监控和报警系统，现在已经加入到CNCF基金会，成为继k8s之后第二个在CNCF托管的项目，在kuberne...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Tue May 14 2024 19:41:49 GMT+0800">
+                
+                    2024-05-14
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/14/Docker%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/">阅读全文<span class="seo-reader-text">Docker搭建Prometheus监控体系</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+            <li class="home-article-item">
+
+                
+
+                
+
+                
+                <div class="flex flex-col gap-5 px-7 pb-7 pt-7">
+                    <h3 class="home-article-title">
+                        <a href="/2024/05/14/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/">
+                            二进制搭建Prometheus监控体系
+                        </a>
+                    </h3>
+
+                    <div class="home-article-content markdown-body">
+                        
+                            
+
+
+修订内容
+版本号
+发布日期
+作者
+
+
+
+发布文档
+V1.0
+
+
+
+
+1. 部署Prometheus1.1 下载Prometheus压缩包官网下载地址：https://prometheus.io/download/ 选择大于2.4版本的，支持ba...
+                        
+                    </div>
+
+                    <div class="home-article-meta-info-container">
+    <div class="home-article-meta-info">
+        <span><i class="fa-solid fa-calendars"></i>&nbsp;
+            <span class="home-article-date" data-date="Tue May 14 2024 19:40:46 GMT+0800">
+                
+                    2024-05-14
+                
+            </span>
+        </span>
+        
+        
+    </div>
+
+    <a href="/2024/05/14/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/">阅读全文<span class="seo-reader-text">二进制搭建Prometheus监控体系</span>&nbsp;<i class="fa-solid fa-angle-right"></i></a>
+</div>
+
+                </div>
+            </li>
+        
+    </ul>
+
+    <div class="home-paginator px-7 py-5">
+        <div class="paginator">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa-regular fa-angle-right"></i></a>
+</div>
+
+    </div>
+</div>
+
+                    <div class="comment-container pjax"></div>
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">阿一</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 12 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
 
 
 

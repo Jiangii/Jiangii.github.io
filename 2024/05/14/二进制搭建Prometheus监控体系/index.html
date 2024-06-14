@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="Hexo Theme Redefine">
+    
+    <meta name="author" content="阿一">
+    <!-- preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    
+    <!--- Seo Part-->
+    
+    <link rel="canonical" href="http://Jiangii.github.io/2024/05/14/二进制搭建prometheus监控体系/"/>
+    <meta name="robots" content="index,follow">
+    <meta name="googlebot" content="index,follow">
+    <meta name="revisit-after" content="1 days">
+    
+        <meta name="description" content="修订内容 版本号 发布日期 作者    发布文档 V1.0     1. 部署Prometheus1.1 下载Prometheus压缩包官网下载地址：https:&#x2F;&#x2F;prometheus.io&#x2F;download&#x2F; 选择大于2.4版本的，支持basic_auth安全认证，减少风险，下载完成后上传文件到服务器 1.2 解压安装Prometheus解压prometheus-2.51.0-rc.0.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="二进制搭建Prometheus监控体系">
+<meta property="og:url" content="http://jiangii.github.io/2024/05/14/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/index.html">
+<meta property="og:site_name" content="阿一的学习笔记">
+<meta property="og:description" content="修订内容 版本号 发布日期 作者    发布文档 V1.0     1. 部署Prometheus1.1 下载Prometheus压缩包官网下载地址：https:&#x2F;&#x2F;prometheus.io&#x2F;download&#x2F; 选择大于2.4版本的，支持basic_auth安全认证，减少风险，下载完成后上传文件到服务器 1.2 解压安装Prometheus解压prometheus-2.51.0-rc.0.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image2.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image3.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image4.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image5.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image6.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image7.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image8.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image9.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image10.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image11.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image12.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image13.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image14.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image15.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image16.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image17.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image18.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image19.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image20.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image21.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image22.png">
+<meta property="og:image" content="http://jiangii.github.io/promethues/image23.png">
+<meta property="article:published_time" content="2024-05-14T11:40:46.601Z">
+<meta property="article:modified_time" content="2024-05-20T12:33:33.830Z">
+<meta property="article:author" content="阿一">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://jiangii.github.io/promethues/image.png">
+    
+    
+    <!--- Icon Part-->
+    <link rel="icon" type="image/png" href="https://github.com/Jiangii.png" sizes="192x192">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://github.com/Jiangii.png">
+    <meta name="theme-color" content="#A31F34">
+    <link rel="shortcut icon" href="https://github.com/Jiangii.png">
+    <!--- Page Info-->
+    
+    <title>
+        
+            二进制搭建Prometheus监控体系 -
+        
+        阿一的学习笔记
+    </title>
+
+    
+<link rel="stylesheet" href="/fonts/Chillax/chillax.css">
+
+
+    <!--- Inject Part-->
+    
+
+    
+        <style>
+    :root {
+        --preloader-background-color: #fff;
+        --preloader-text-color: #000;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --preloader-background-color: #202124;
+            --preloader-text-color: #fff;
+        }
+    }
+
+    @media (prefers-color-scheme: light) {
+        :root {
+            --preloader-background-color: #fff;
+            --preloader-text-color: #000;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .ml13 {
+            font-size: 2.6rem !important; /* Adjust this value as needed */
+        }
+    }
+
+    .preloader {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem; /* Tailwind 'gap-4' is 1rem */
+        align-items: center;
+        justify-content: center;
+        position: fixed;
+        padding: 12px;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh; /* 'h-screen' is 100% of the viewport height */
+        background-color: var(--preloader-background-color);
+        z-index: 1100; /* 'z-[1100]' sets the z-index */
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .ml13 {
+        font-size: 3.2rem;
+        /* text-transform: uppercase; */
+        color: var(--preloader-text-color);
+        letter-spacing: -1px;
+        font-weight: 500;
+        font-family: 'Chillax-Variable', sans-serif;
+        text-align: center;
+    }
+
+    .ml13 .word {
+        display: inline-flex;
+        flex-wrap: wrap;
+        white-space: nowrap;
+    }
+
+    .ml13 .letter {
+        display: inline-block;
+        line-height: 1em;
+    }
+</style>
+
+<div class="preloader">
+    
+<script src="/js/libs/anime.min.js"></script>
+
+    <h1 class="ml13">
+        阿一的学习笔记
+    </h1>
+    <script>
+        var textWrapper = document.querySelector('.ml13');
+        // Split text into words
+        var words = textWrapper.textContent.trim().split(' ');
+
+        // Clear the existing content
+        textWrapper.innerHTML = '';
+
+        // Wrap each word and its letters in spans
+        words.forEach(function(word) {
+            var wordSpan = document.createElement('span');
+            wordSpan.classList.add('word');
+            wordSpan.innerHTML = word.replace(/\S/g, "<span class='letter'>$&</span>");
+            textWrapper.appendChild(wordSpan);
+            textWrapper.appendChild(document.createTextNode(' ')); // Add space between words
+        });
+
+
+        anime.timeline({loop: true})
+            .add({
+                targets: '.ml13 .letter',
+                translateY: [100,0],
+                translateZ: 0,
+                opacity: [0,1],
+                easing: "easeOutExpo",
+                duration: 1400,
+                delay: (el, i) => 300 + 30 * i
+            }).add({
+            targets: '.ml13 .letter',
+            translateY: [0,-100],
+            opacity: [1,0],
+            easing: "easeInExpo",
+            duration: 1200,
+            delay: (el, i) => 100 + 30 * i
+        });
+
+        let themeStatus = JSON.parse(localStorage.getItem('REDEFINE-THEME-STATUS'))?.isDark;
+
+        // If the theme status is not found in local storage, check the preferred color scheme
+        if (themeStatus === undefined || themeStatus === null) {
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                themeStatus = 'dark';
+            } else {
+                themeStatus = 'light';
+            }
+        }
+
+        // Now you can use the themeStatus variable in your code
+        if (themeStatus) {
+            document.documentElement.style.setProperty('--preloader-background-color', '#202124');
+            document.documentElement.style.setProperty('--preloader-text-color', '#fff');
+        } else {
+            document.documentElement.style.setProperty('--preloader-background-color', '#fff');
+            document.documentElement.style.setProperty('--preloader-text-color', '#000');
+        }
+
+        window.addEventListener('load', function () {
+            hidePreloaderAfterTimeout(1000); // Hide after 1000 milliseconds once the window has loaded
+        });
+
+        // Backup failsafe: Hide preloader after a maximum of 5000 milliseconds, regardless of the window load event
+        hidePreloaderAfterTimeout(5000);
+
+        function hidePreloaderAfterTimeout(delay) {
+            setTimeout(function () {
+                var preloader = document.querySelector('.preloader');
+                preloader.style.opacity = '0';
+                setTimeout(function () {
+                    preloader.style.display = 'none';
+                }, 200);
+            }, delay);
+        }
+    </script>
+</div>
+    
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+        
+<link rel="stylesheet" href="/assets/build/styles.css">
+
+    
+
+    
+<link rel="stylesheet" href="/fonts/fonts.css">
+
+    
+<link rel="stylesheet" href="/fonts/Satoshi/satoshi.css">
+
+    <!--- Font Part-->
+    
+    
+    
+    
+
+
+    <script id="hexo-configurations">
+    window.config = {"hostname":"jiangii.github.io","root":"/","language":"zh-CN"};
+    window.theme = {"articles":{"style":{"font_size":"16px","line_height":1.5,"image_border_radius":"14px","image_alignment":"center","image_caption":false,"link_icon":true,"title_alignment":"left","headings_top_spacing":{"h1":"5rem","h2":"4rem","h3":"2.8rem","h4":"2.5rem","h5":"2.2rem","h6":"2rem"}},"word_count":{"enable":true,"count":true,"min2read":true},"author_label":{"enable":true,"auto":false,"list":[]},"code_block":{"copy":true,"style":"mac","font":{"enable":false,"family":null,"url":null}},"toc":{"enable":true,"max_depth":3,"number":false,"expand":true,"init_open":true},"copyright":{"enable":true,"default":"cc_by_nc_sa"},"lazyload":true,"recommendation":{"enable":false,"title":"推荐阅读","limit":3,"mobile_limit":2,"placeholder":"/images/wallhaven-wqery6-light.webp","skip_dirs":[]}},"colors":{"primary":"#A31F34","secondary":null,"default_mode":"light"},"global":{"fonts":{"chinese":{"enable":false,"family":null,"url":null},"english":{"enable":false,"family":null,"url":null}},"content_max_width":"1000px","sidebar_width":"210px","hover":{"shadow":true,"scale":false},"scroll_progress":{"bar":false,"percentage":true},"website_counter":{"url":"https://cn.vercount.one/js","enable":true,"site_pv":true,"site_uv":true,"post_pv":true},"single_page":true,"preloader":true,"open_graph":true,"google_analytics":{"enable":false,"id":null}},"home_banner":{"enable":true,"style":"fixed","image":{"light":"/images/wallhaven-wqery6-light.webp","dark":"/images/wallhaven-wqery6-dark.webp"},"title":"阿一的学习笔记","subtitle":{"text":["祝我年少有为","浅浅学习一下吧","优秀自己，拓宽眼界"],"hitokoto":{"enable":false,"api":"https://v1.hitokoto.cn"},"typing_speed":200,"backing_speed":80,"starting_delay":500,"backing_delay":1500,"loop":true,"smart_backspace":true},"text_color":{"light":"#fff","dark":"#d1d1b6"},"text_style":{"title_size":"2.8rem","subtitle_size":"1.5rem","line_height":1.2},"custom_font":{"enable":false,"family":null,"url":null},"social_links":{"enable":true,"style":"default","links":{"github":"https://jiangii.github.io/","instagram":null,"zhihu":null,"twitter":null,"email":"3084498143@qq.com"},"qrs":{"weixin":null}}},"plugins":{"feed":{"enable":false},"aplayer":{"enable":false,"type":"fixed","audios":[{"name":null,"artist":null,"url":null,"cover":null,"lrc":null}]},"mermaid":{"enable":false,"version":"9.3.0"}},"version":"2.6.1","navbar":{"auto_hide":false,"color":{"left":"#f78736","right":"#367df7","transparency":35},"width":{"home":"1200px","pages":"1000px"},"links":{"Home":{"path":"/","icon":"fa-regular fa-house"},"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}},"search":{"enable":true,"preload":true}},"page_templates":{"friends_column":2,"tags_style":"blur"},"home":{"sidebar":{"enable":true,"position":"left","first_item":"info","announcement":"祝你我年少有为","show_on_mobile":true,"links":{"Archives":{"path":"/archives","icon":"fa-regular fa-archive"}}},"article_date_format":"auto","categories":{"enable":true,"limit":3},"tags":{"enable":true,"limit":3}},"footerStart":"2024/4/30 17:30:00"};
+    window.lang_ago = {"second":"%s 秒前","minute":"%s 分钟前","hour":"%s 小时前","day":"%s 天前","week":"%s 周前","month":"%s 个月前","year":"%s 年前"};
+    window.data = {"masonry":false};
+  </script>
+    
+    <!--- Fontawesome Part-->
+    
+<link rel="stylesheet" href="/fontawesome/fontawesome.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/brands.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/solid.min.css">
+
+    
+<link rel="stylesheet" href="/fontawesome/regular.min.css">
+
+    
+    
+    
+    
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+
+<body>
+<div class="progress-bar-container">
+    
+
+    
+        <span class="pjax-progress-bar"></span>
+<!--        <span class="swup-progress-icon">-->
+<!--            <i class="fa-solid fa-circle-notch fa-spin"></i>-->
+<!--        </span>-->
+    
+</div>
+
+
+<main class="page-container" id="swup">
+
+    
+
+    <div class="main-content-container">
+
+
+        <div class="main-content-header">
+            <header class="navbar-container px-6 md:px-12">
+
+    <div class="navbar-content ">
+        <div class="left">
+            
+            <a class="logo-title" href="/">
+                
+                阿一的学习笔记
+                
+            </a>
+        </div>
+
+        <div class="right">
+            <!-- PC -->
+            <div class="desktop">
+                <ul class="navbar-list">
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/"
+                                        >
+                                    <i class="fa-regular fa-house fa-fw"></i>
+                                    首页
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                        
+                            
+
+                            <li class="navbar-item">
+                                <!-- Menu -->
+                                <a class=""
+                                   href="/archives"
+                                        >
+                                    <i class="fa-regular fa-archive fa-fw"></i>
+                                    归档
+                                    
+                                </a>
+
+                                <!-- Submenu -->
+                                
+                            </li>
+                    
+                    
+                        <li class="navbar-item search search-popup-trigger">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </li>
+                    
+                </ul>
+            </div>
+            <!-- Mobile -->
+            <div class="mobile">
+                
+                    <div class="icon-item search search-popup-trigger"><i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                
+                <div class="icon-item navbar-bar">
+                    <div class="navbar-bar-middle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile sheet -->
+    <div class="navbar-drawer h-screen w-full absolute top-0 left-0 bg-background-color flex flex-col justify-between">
+        <ul class="drawer-navbar-list flex flex-col px-4 justify-center items-start">
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/"
+                        >
+                            <span>
+                                首页
+                            </span>
+                            
+                                <i class="fa-regular fa-house fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+                
+                    
+
+                    <li class="drawer-navbar-item text-base my-1.5 flex flex-col w-full">
+                        
+                        <a class="py-1.5 px-2 flex flex-row items-center justify-between gap-1 hover:!text-primary active:!text-primary text-2xl font-semibold group border-b border-border-color hover:border-primary w-full "
+                           href="/archives"
+                        >
+                            <span>
+                                归档
+                            </span>
+                            
+                                <i class="fa-regular fa-archive fa-sm fa-fw"></i>
+                            
+                        </a>
+                        
+
+                        
+                    </li>
+            
+
+            
+            
+                
+                    
+            
+        </ul>
+
+        <div class="statistics flex justify-around my-2.5">
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/tags">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">标签</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/categories">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">0</div>
+        <div class="label text-third-text-color text-sm">分类</div>
+    </a>
+    <a class="item tag-count-item flex flex-col justify-center items-center w-20" href="/archives">
+        <div class="number text-2xl sm:text-xl text-second-text-color font-semibold">12</div>
+        <div class="label text-third-text-color text-sm">文章</div>
+    </a>
+</div>
+    </div>
+
+    <div class="window-mask"></div>
+
+</header>
+
+
+        </div>
+
+        <div class="main-content-body">
+
+            
+
+            <div class="main-content">
+
+                
+                    <div class="post-page-container flex relative justify-between box-border w-full h-full">
+    <div class="article-content-container">
+
+        <div class="article-title relative w-full">
+            
+                <div class="w-full flex items-center pt-6 justify-start">
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">二进制搭建Prometheus监控体系</h1>
+                </div>
+            
+            </div>
+
+        
+            <div class="article-header flex flex-row gap-2 items-center px-2 sm:px-6 md:px-8">
+                <div class="avatar w-[46px] h-[46px] flex-shrink-0 rounded-medium border border-border-color p-[1px]">
+                    <img src="https://github.com/Jiangii.png">
+                </div>
+                <div class="info flex flex-col justify-between">
+                    <div class="author flex items-center">
+                        <span class="name text-default-text-color text-lg font-semibold">阿一</span>
+                        
+                            <span class="author-label ml-1.5 text-xs px-2 py-0.5 rounded-small text-third-text-color border border-shadow-color-1">Lv2</span>
+                        
+                    </div>
+                    <div class="meta-info">
+                        <div class="article-meta-info">
+    <span class="article-date article-meta-item">
+        <i class="fa-regular fa-pen-fancy"></i>&nbsp;
+        <span class="desktop">2024-05-14 19:40:46</span>
+        <span class="mobile">2024-05-14 19:40:46</span>
+        <span class="hover-info">创建</span>
+    </span>
+    
+        <span class="article-date article-meta-item">
+            <i class="fa-regular fa-wrench"></i>&nbsp;
+            <span class="desktop">2024-05-20 20:33:33</span>
+            <span class="mobile">2024-05-20 20:33:33</span>
+            <span class="hover-info">更新</span>
+        </span>
+    
+
+    
+    
+
+    
+    
+    
+    
+        <span class="article-pv article-meta-item">
+            <i class="fa-regular fa-eye"></i>&nbsp;<span id="busuanzi_value_page_pv"></span>
+        </span>
+    
+</div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+        
+
+
+        <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
+            <table>
+<thead>
+<tr>
+<th>修订内容</th>
+<th>版本号</th>
+<th>发布日期</th>
+<th>作者</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>发布文档</td>
+<td>V1.0</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="1-部署Prometheus"><a href="#1-部署Prometheus" class="headerlink" title="1. 部署Prometheus"></a>1. 部署Prometheus</h2><h3 id="1-1-下载Prometheus压缩包"><a href="#1-1-下载Prometheus压缩包" class="headerlink" title="1.1 下载Prometheus压缩包"></a>1.1 下载Prometheus压缩包</h3><p>官网下载地址：<a class="link"   target="_blank" rel="noopener" href="https://prometheus.io/download/" >https://prometheus.io/download/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>选择大于2.4版本的，支持basic_auth安全认证，减少风险，下载完成后上传文件到服务器<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image.png"
+                      alt="image.png"
+                ></p>
+<h3 id="1-2-解压安装Prometheus"><a href="#1-2-解压安装Prometheus" class="headerlink" title="1.2 解压安装Prometheus"></a>1.2 解压安装Prometheus</h3><p>解压<a class="link"   target="_blank" rel="noopener" href="https://github.com/prometheus/prometheus/releases/download/v2.51.0-rc.0/prometheus-2.51.0-rc.0.linux-amd64.tar.gz" >prometheus-2.51.0-rc.0.linux-amd64.tar.gz <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">#解压</span><br><span class="line">tar zxvf prometheus<span class="number">-2.51</span><span class="number">.0</span>-rc<span class="number">.0</span>.linux-amd64.tar.gz</span><br><span class="line"></span><br><span class="line">#解压后文件移动到 /usr/local/prometheus   该路径可以自己选择其他路径</span><br><span class="line">mv prometheus<span class="number">-2.37</span><span class="number">.2</span>.linux-amd64 /usr/local/prometheus</span><br><span class="line"></span><br><span class="line">#进入prometheus目录下查看是否成功</span><br><span class="line">cd /usr/local/prometheus</span><br><span class="line">ll</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image2.png"
+                      alt="image.png"
+                ></p>
+<h3 id="1-3-启动Prometheus"><a href="#1-3-启动Prometheus" class="headerlink" title="1.3 启动Prometheus"></a>1.3 启动Prometheus</h3><p>给它增加一个启停脚本</p>
+<blockquote>
+<p>cat &gt;&#x2F;etc&#x2F;systemd&#x2F;system&#x2F;prometheus.service &lt;&lt;EOF</p>
+</blockquote>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span>Unit<span class="punctuation">]</span></span><br><span class="line">Description=prometheus</span><br><span class="line">After=network-online.target</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Service<span class="punctuation">]</span></span><br><span class="line">User=root</span><br><span class="line">Restart=on-failure</span><br><span class="line">#输入安装Prometheus的路径</span><br><span class="line">ExecStart=/usr/local/prometheus/prometheus \</span><br><span class="line">--config.file=/usr/local/prometheus/prometheus.yml \</span><br><span class="line">--web.listen-address=<span class="punctuation">:</span><span class="number">9090</span> \</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Install<span class="punctuation">]</span></span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>启动Prometheus</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#开启自启动</span><br><span class="line">systemctl enable prometheus &amp;&amp; systemctl start prometheus</span><br><span class="line"></span><br><span class="line">#查看服务装填</span><br><span class="line">systemctl status prometheus</span><br><span class="line"></span><br><span class="line">#重启命令</span><br><span class="line">systemctl restart prometheus</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image3.png"
+                      alt="image.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image4.png"
+                      alt="image.png"
+                ></p>
+<h2 id="2-添加basic-auth安全认证"><a href="#2-添加basic-auth安全认证" class="headerlink" title="2. 添加basic_auth安全认证"></a>2. 添加basic_auth安全认证</h2><p>在Prometheus中，如果你想要添加基本身份验证（Basic Authentication），通常有两种方式：</p>
+<ol>
+<li>使用反向代理（如Nginx或Traefik）来处理基本身份验证，并将请求转发给Prometheus。</li>
+<li>使用Prometheus自带的basic_auth功能（这在一些旧版本或特定配置中可用，但并非Prometheus的核心功能，因此可能在未来的版本中有所变化或移除）。</li>
+</ol>
+<p>这里我使用官方给的basic_auth功能</p>
+<h3 id="2-1-安装Apache2"><a href="#2-1-安装Apache2" class="headerlink" title="2.1 安装Apache2"></a>2.1 安装Apache2</h3><p>Ubuntu安装Httpd（apache）及相关配置作用</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#先更新</span><br><span class="line">apt-get update</span><br><span class="line">#安装apache2</span><br><span class="line">sudo apt-get install apache2</span><br><span class="line">#启动</span><br><span class="line">systemctl start apache2</span><br><span class="line">#查看服务</span><br><span class="line">systemctl status apache2</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image5.png"
+                      alt="image.png"
+                ><br>取消apache的Ubuntu Default页面<br>编辑&#x2F;etc&#x2F;apache2目录下的apache2.conf文件，将下述代码注释<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image6.png"
+                      alt="image.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image7.png"
+                      alt="image.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image8.png"
+                      alt="image.png"
+                ></p>
+<h3 id="2-2-添加basic-auth"><a href="#2-2-添加basic-auth" class="headerlink" title="2.2 添加basic_auth"></a>2.2 添加basic_auth</h3><p>先通过httpd工具生成basic_auth密钥</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#生成密码</span></span><br><span class="line">htpasswd -nBC 12 <span class="string">&#x27;&#x27;</span> | <span class="built_in">tr</span> -d <span class="string">&#x27;:\n&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 密码设置的是123456</span></span><br><span class="line">New password:           </span><br><span class="line">Re-<span class="built_in">type</span> new password: </span><br><span class="line"><span class="comment"># 生成的密钥信息</span></span><br><span class="line">$2y$12<span class="variable">$L3XPz9UsqtWXzrE9XuOVfOLsreHxORINwf7sC1nKkFXOdTinMb9Yiroot</span></span><br></pre></td></tr></table></figure></div>
+<p>在 &#x2F;usr&#x2F;local&#x2F;prometheus 目录下新建web-config.yml文件</p>
+<div class="highlight-container" data-rel="Bash"><figure class="iseeu highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/local/prometheus</span><br><span class="line"></span><br><span class="line"><span class="comment">#在prometheus目录下新建web-config.yml</span></span><br><span class="line"><span class="comment"># vim web-config.yml 中内容为上述生成的密钥</span></span><br><span class="line">basic_auth_users:</span><br><span class="line">    admin: $2y$12<span class="variable">$L3XPz9UsqtWXzrE9XuOVfOLsreHxORINwf7sC1nKkFXOdTinMb9Yiroot</span></span><br></pre></td></tr></table></figure></div>
+<p>修改prometheus.yml配置文件，在srape_configs中添加basic_auth<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image9.png"
+                      alt="image.png"
+                ><br>修改我们之前创建的&#x2F;etc&#x2F;systemd&#x2F;system&#x2F;prometheus.service文件</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span>Unit<span class="punctuation">]</span></span><br><span class="line">Description=prometheus</span><br><span class="line">After=network-online.target</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Service<span class="punctuation">]</span></span><br><span class="line">User=root</span><br><span class="line">Restart=on-failure</span><br><span class="line">#输入安装Prometheus的路径</span><br><span class="line">ExecStart=/usr/local/prometheus/prometheus \</span><br><span class="line">--config.file=/usr/local/prometheus/prometheus.yml \</span><br><span class="line">#添加此行代码</span><br><span class="line">--web.config.file=/usr/local/prometheus/web-config.yml \</span><br><span class="line">--web.listen-address=<span class="punctuation">:</span><span class="number">9090</span> \</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Install<span class="punctuation">]</span></span><br><span class="line">WantedBy=multi-user.target</span><br><span class="line"></span><br></pre></td></tr></table></figure></div>
+<p>重新加载并启动prometheus</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#重新加载</span><br><span class="line">systemctl reload prometheus</span><br><span class="line">#重启</span><br><span class="line">systemctl restart prometheus</span><br><span class="line">#查看服务</span><br><span class="line">systemctl status prometheus</span><br></pre></td></tr></table></figure></div>
+<p>访问prometheus的web页面，即可进行安全认证<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image10.png"
+                      alt="image.png"
+                ></p>
+<h2 id="3-部署Grafana"><a href="#3-部署Grafana" class="headerlink" title="3. 部署Grafana"></a>3. 部署Grafana</h2><h3 id="3-1-安装Grafana"><a href="#3-1-安装Grafana" class="headerlink" title="3.1 安装Grafana"></a>3.1 安装Grafana</h3><blockquote>
+<p>Grafana 是一个可视化工具，简单点说就是用来展示数据的。它和Zabbix、Prometheus 有本质区别，在于它不能解决监控问题，仅用于展示。也就是说，在监控领域，Grafana 需要配合 Zabbix、Prometheus 等工具一起使用，以获取数据源。<br>Grafana 官方是这么介绍 Grafana 的：grafana是用于可视化大型测量数据的开源程序，他提供了强大和优雅的方式去创建、共享、浏览数据。dashboard中显示了你不同metric数据源中的数据。</p>
+</blockquote>
+<blockquote>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.yuque.com/attachments/yuque/0/2024/gz/42421545/1710746155661-b5161af9-8249-4ae5-864b-e26cba362b7f.gz?_lake_card=%7B%22src%22:%22https://www.yuque.com/attachments/yuque/0/2024/gz/42421545/1710746155661-b5161af9-8249-4ae5-864b-e26cba362b7f.gz%22,%22name%22:%22grafana-enterprise-9.5.8.linux-amd64.tar.gz%22,%22size%22:83517424,%22ext%22:%22gz%22,%22source%22:%22%22,%22status%22:%22done%22,%22download%22:true,%22taskId%22:%22u0d58c0cf-6d03-443e-9625-91c6c5aa4a2%22,%22taskType%22:%22upload%22,%22type%22:%22application/x-gzip%22,%22__spacing%22:%22both%22,%22mode%22:%22title%22,%22id%22:%22uc2783a77%22,%22margin%22:%7B%22top%22:true,%22bottom%22:true%7D,%22card%22:%22file%22%7D" >grafana-enterprise-9.5.8.linux-amd64.tar.gz <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br>将压缩包上传至服务器并解压</p>
+</blockquote>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#文件目录自定义</span><br><span class="line">cd /opt</span><br><span class="line">#解压</span><br><span class="line">tar zxvf grafana-enterprise<span class="number">-9.5</span><span class="number">.8</span>.linux-amd64.tar.gz</span><br><span class="line">#将文件夹名称改为 /grafana</span><br><span class="line">ll</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image11.png"
+                      alt="image.png"
+                ></p>
+<p>在&#x2F;etc&#x2F;systemd&#x2F;system 目录下新建grafana.service文件</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span>Unit<span class="punctuation">]</span></span><br><span class="line">Description=grafana</span><br><span class="line"> </span><br><span class="line"><span class="punctuation">[</span>Service<span class="punctuation">]</span></span><br><span class="line">#这个路径看用户将grafana安装在哪里</span><br><span class="line">ExecStart=/opt/grafana/bin/grafana-server -homepath=/opt/grafana</span><br><span class="line">ExecReload=/bin/kill -HUP $MAINPID</span><br><span class="line">KillMode=process</span><br><span class="line">Restart=on-failure</span><br><span class="line"> </span><br><span class="line"><span class="punctuation">[</span>Install<span class="punctuation">]</span></span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></div>
+
+<p>启动grafana</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl start grafana.service</span><br><span class="line">systemctl enable grafana.service</span><br><span class="line">systemctl status grafana</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image12.png"
+                      alt="image.png"
+                ></p>
+<h3 id="3-2-对接Prometheus"><a href="#3-2-对接Prometheus" class="headerlink" title="3.2 对接Prometheus"></a>3.2 对接Prometheus</h3><p>新建数据源，选择Prometheus，输入URL，因为Prometheus添加了安全认证，所以请勾选Basic auth选项，填写用户名和密码，保存<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image13.png"
+                      alt="image.png"
+                ></p>
+<h2 id="4-部署node-exporter"><a href="#4-部署node-exporter" class="headerlink" title="4. 部署node-exporter"></a>4. 部署node-exporter</h2><h3 id="4-1-安装node-exporter"><a href="#4-1-安装node-exporter" class="headerlink" title="4.1 安装node-exporter"></a>4.1 安装node-exporter</h3><p>在Prometheus官网下载提供的node-exporter压缩包<br>上传到服务器并解压</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#进入目录</span><br><span class="line">cd /usr/local</span><br><span class="line">#解压</span><br><span class="line">tar zxvf node_exporter<span class="number">-1.7</span><span class="number">.0</span>.linux-amd64.tar.gz</span><br><span class="line">#将文件夹名改为node-exporter</span><br><span class="line">ll</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image14.png"
+                      alt="image.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image15.png"
+                      alt="image.png"
+                ></p>
+<h3 id="4-2-启动node-exporter"><a href="#4-2-启动node-exporter" class="headerlink" title="4.2 启动node_exporter"></a>4.2 启动node_exporter</h3><p>在&#x2F;etc&#x2F;systemd&#x2F;system 目录下添加node_exporter.service文件</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span>Unit<span class="punctuation">]</span></span><br><span class="line">Description=node_exporter</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Service<span class="punctuation">]</span></span><br><span class="line">Restart=on-failure</span><br><span class="line">ExecStart=/usr/local/node_exporter/node_exporter \</span><br><span class="line">--web.listen-address=<span class="punctuation">:</span><span class="number">9190</span> </span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Install<span class="punctuation">]</span></span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></div>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#加载service文件</span><br><span class="line">systemctl daemon-reload</span><br><span class="line">#启动node_exporter</span><br><span class="line">systemctl start node_exporter.service</span><br><span class="line">#查看服务状态</span><br><span class="line">systemctl status node_exporter.service</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image16.png"
+                      alt="image.png"
+                ></p>
+<h3 id="4-3-添加basic-auth"><a href="#4-3-添加basic-auth" class="headerlink" title="4.3 添加basic_auth"></a>4.3 添加basic_auth</h3><div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#生成密码</span><br><span class="line">htpasswd -nBC <span class="number">12</span> &#x27;&#x27; | tr -d &#x27;<span class="punctuation">:</span>\n&#x27;</span><br><span class="line"></span><br><span class="line"># 密码设置的是<span class="number">123456</span></span><br><span class="line">New password<span class="punctuation">:</span>           </span><br><span class="line">Re-type new password<span class="punctuation">:</span> </span><br><span class="line"># 生成的密钥信息</span><br><span class="line">$<span class="number">2</span>y$<span class="number">12</span>$oEVR2En/<span class="number">3</span>ok9Z66pveNz2.krFF1mLixWrtbdntzhjOIOTPlXOAexmroot</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image17.png"
+                      alt="image.png"
+                ></p>
+<p>&#x2F;usr&#x2F;local&#x2F;node-exporter 目录下新建web-config.yml文件</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">cd /usr/local/node-exporter</span><br><span class="line"></span><br><span class="line">#在prometheus目录下新建web-config.yml</span><br><span class="line"># vim web-config.yml 中内容为上述生成的密钥</span><br><span class="line">basic_auth_users<span class="punctuation">:</span></span><br><span class="line">    admin<span class="punctuation">:</span> $<span class="number">2</span>y$<span class="number">12</span>$oEVR2En/<span class="number">3</span>ok9Z66pveNz2.krFF1mLixWrtbdntzhjOIOTPlXOAexmroot</span><br><span class="line"></span><br><span class="line">ll</span><br></pre></td></tr></table></figure></div>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image18.png"
+                      alt="image.png"
+                ></p>
+<p>修改我们之前创建的&#x2F;etc&#x2F;systemd&#x2F;system&#x2F;node_exporter.service文件</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">[</span>Unit<span class="punctuation">]</span></span><br><span class="line">Description=node_exporter</span><br><span class="line">After=network.target</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Service<span class="punctuation">]</span></span><br><span class="line">Restart=on-failure</span><br><span class="line">ExecStart=/usr/local/node_exporter/node_exporter \</span><br><span class="line">--web.listen-address=<span class="punctuation">:</span><span class="number">9190</span> \</span><br><span class="line">#添加此行代码</span><br><span class="line">--web.config.file=/usr/local/node_exporter/web-config.yml</span><br><span class="line"></span><br><span class="line"><span class="punctuation">[</span>Install<span class="punctuation">]</span></span><br><span class="line">WantedBy=multi-user.target</span><br></pre></td></tr></table></figure></div>
+
+<p>重新加载service文件并启动node-exporter<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image19.png"
+                      alt="image.png"
+                ><br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image20.png"
+                      alt="image.png"
+                ></p>
+<h3 id="4-4-对接Prometheus"><a href="#4-4-对接Prometheus" class="headerlink" title="4.4 对接Prometheus"></a>4.4 对接Prometheus</h3><p>在&#x2F;usr&#x2F;local&#x2F;prometheus&#x2F;prometheus.yml文件中添加配置内容</p>
+<div class="highlight-container" data-rel="Json"><figure class="iseeu highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">- job_name<span class="punctuation">:</span> <span class="string">&quot;10.110.115.65 node-exporter&quot;</span></span><br><span class="line">  basic_auth<span class="punctuation">:</span></span><br><span class="line">    username<span class="punctuation">:</span> admin</span><br><span class="line">    password<span class="punctuation">:</span> <span class="number">123456</span> </span><br><span class="line">  scheme<span class="punctuation">:</span> http</span><br><span class="line">  static_configs<span class="punctuation">:</span></span><br><span class="line">    - targets<span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;10.110.115.65:9190&quot;</span><span class="punctuation">]</span></span><br></pre></td></tr></table></figure></div>
+
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image21.png"
+                      alt="image.png"
+                ></p>
+<p>然后重新加载service文件并启动Prometheus<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image22.png"
+                      alt="image.png"
+                ></p>
+<p>grafana数据显示<br><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../promethues/image23.png"
+                      alt="image.png"
+                ></p>
+<h2 id="5-部署mysql-exporter"><a href="#5-部署mysql-exporter" class="headerlink" title="5. 部署mysql-exporter"></a>5. 部署mysql-exporter</h2><p>我懒了，不想写啦๑乛◡乛๑ </p>
+
+        </div>
+
+        
+            <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
+                <div class="article-copyright-info-container">
+    <ul>
+        <li><strong>标题:</strong> 二进制搭建Prometheus监控体系</li>
+        <li><strong>作者:</strong> 阿一</li>
+        <li><strong>创建于
+                :</strong> 2024-05-14 19:40:46</li>
+        
+            <li>
+                <strong>更新于
+                    :</strong> 2024-05-20 20:33:33
+            </li>
+        
+        <li>
+            <strong>链接:</strong> https://jiangii.github.io/2024/05/14/二进制搭建Prometheus监控体系/
+        </li>
+        <li>
+            <strong>
+                版权声明:
+            </strong>
+            
+
+            
+                本文章采用 <a class="license" target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0">CC BY-NC-SA 4.0</a> 进行许可。
+            
+        </li>
+    </ul>
+</div>
+
+            </div>
+        
+
+        
+
+        
+
+        
+            <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
+                
+                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="prev"
+                        rel="prev"
+                        href="/2024/05/14/Docker%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/"
+                        >
+                            <span class="left arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </span>
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Docker搭建Prometheus监控体系</span>
+                                <span class="post-nav-item">上一篇</span>
+                            </span>
+                        </a>
+                    </div>
+                
+                
+                    <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
+                        <a class="next"
+                        rel="next"
+                        href="/2024/05/11/Github%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A22/"
+                        >
+                            <span class="title flex justify-center items-center">
+                                <span class="post-nav-title-item">Github搭建个人博客（二）</span>
+                                <span class="post-nav-item">下一篇</span>
+                            </span>
+                            <span class="right arrow-icon flex justify-center items-center">
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </span>
+                        </a>
+                    </div>
+                
+            </div>
+        
+
+
+        
+            <div class="comment-container px-2 sm:px-6 md:px-8 pb-8">
+                <div class="comments-container mt-10 w-full ">
+    <div id="comment-anchor" class="w-full h-2.5"></div>
+    <div class="comment-area-title w-full my-1.5 md:my-2.5 text-xl md:text-3xl font-bold">
+        评论
+    </div>
+    
+
+        
+            
+    <div id="waline"></div>
+    <script type="module" data-swup-reload-script>
+      import { init } from '/js/libs/waline.mjs';
+
+      function loadWaline() {
+        init({
+          el: '#waline',
+          serverURL: 'https://example.example.com',
+          lang: 'zh-CN',
+          dark: 'body[class~="dark-mode"]',
+          requiredMeta: ['nick', 'mail'],
+          emoji: [],
+          recaptchaV3Key: "wasd",
+          
+        });
+      }
+
+      if (typeof swup !== 'undefined') {
+        loadWaline();
+      } else {
+        window.addEventListener('DOMContentLoaded', loadWaline);
+      }
+    </script>
+
+
+
+        
+    
+</div>
+
+            </div>
+        
+    </div>
+
+    
+        <div class="toc-content-container">
+            <div class="post-toc-wrap">
+    <div class="post-toc">
+        <div class="toc-title">此页目录</div>
+        <div class="page-title">二进制搭建Prometheus监控体系</div>
+        <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E9%83%A8%E7%BD%B2Prometheus"><span class="nav-text">1. 部署Prometheus</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E4%B8%8B%E8%BD%BDPrometheus%E5%8E%8B%E7%BC%A9%E5%8C%85"><span class="nav-text">1.1 下载Prometheus压缩包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E8%A7%A3%E5%8E%8B%E5%AE%89%E8%A3%85Prometheus"><span class="nav-text">1.2 解压安装Prometheus</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-%E5%90%AF%E5%8A%A8Prometheus"><span class="nav-text">1.3 启动Prometheus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%B7%BB%E5%8A%A0basic-auth%E5%AE%89%E5%85%A8%E8%AE%A4%E8%AF%81"><span class="nav-text">2. 添加basic_auth安全认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%AE%89%E8%A3%85Apache2"><span class="nav-text">2.1 安装Apache2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%B7%BB%E5%8A%A0basic-auth"><span class="nav-text">2.2 添加basic_auth</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E9%83%A8%E7%BD%B2Grafana"><span class="nav-text">3. 部署Grafana</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%AE%89%E8%A3%85Grafana"><span class="nav-text">3.1 安装Grafana</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%AF%B9%E6%8E%A5Prometheus"><span class="nav-text">3.2 对接Prometheus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E9%83%A8%E7%BD%B2node-exporter"><span class="nav-text">4. 部署node-exporter</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AE%89%E8%A3%85node-exporter"><span class="nav-text">4.1 安装node-exporter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%90%AF%E5%8A%A8node-exporter"><span class="nav-text">4.2 启动node_exporter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E6%B7%BB%E5%8A%A0basic-auth"><span class="nav-text">4.3 添加basic_auth</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%E5%AF%B9%E6%8E%A5Prometheus"><span class="nav-text">4.4 对接Prometheus</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E9%83%A8%E7%BD%B2mysql-exporter"><span class="nav-text">5. 部署mysql-exporter</span></a></li></ol>
+
+    </div>
+</div>
+        </div>
+    
+</div>
+
+
+
+                
+
+            </div>
+
+            
+
+        </div>
+
+        <div class="main-content-footer">
+            <footer class="footer mt-5 py-5 h-auto text-base text-third-text-color relative border-t-2 border-t-border-color">
+    <div class="info-container py-3 text-center">
+        
+        <div class="text-center">
+            &copy;
+            
+              <span>2024</span>
+              -
+            
+            2024&nbsp;&nbsp;<i class="fa-solid fa-heart fa-beat" style="--fa-animation-duration: 0.5s; color: #f54545"></i>&nbsp;&nbsp;<a href="/">阿一</a>
+            
+                
+                <p class="post-count space-x-0.5">
+                    <span>
+                        共 12 篇文章
+                    </span>
+                    
+                </p>
+            
+        </div>
+        
+            <script data-swup-reload-script src="https://cn.vercount.one/js"></script>
+            <div class="relative text-center lg:absolute lg:right-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-right">
+                
+                    <span id="busuanzi_container_site_uv" class="lg:!block">
+                        <span class="text-sm">访问人数</span>
+                        <span id="busuanzi_value_site_uv"></span>
+                    </span>
+                
+                
+                    <span id="busuanzi_container_site_pv" class="lg:!block">
+                        <span class="text-sm">总访问量</span>
+                        <span id="busuanzi_value_site_pv"></span>
+                    </span>
+                
+            </div>
+        
+        <div class="relative text-center lg:absolute lg:left-[20px] lg:top-1/2 lg:-translate-y-1/2 lg:text-left">
+            <span class="lg:block text-sm">由 <?xml version="1.0" encoding="utf-8"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"><svg class="relative top-[2px] inline-block align-baseline" version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="1rem" height="1rem" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve"><path fill="#0E83CD" d="M256.4,25.8l-200,115.5L56,371.5l199.6,114.7l200-115.5l0.4-230.2L256.4,25.8z M349,354.6l-18.4,10.7l-18.6-11V275H200v79.6l-18.4,10.7l-18.6-11v-197l18.5-10.6l18.5,10.8V237h112v-79.6l18.5-10.6l18.5,10.8V354.6z"/></svg><a target="_blank" class="text-base" href="https://hexo.io">Hexo</a> 驱动</span>
+            <span class="text-sm lg:block">主题&nbsp;<a class="text-base" target="_blank" href="https://github.com/EvanNotFound/hexo-theme-redefine">Redefine v2.6.1</a></span>
+        </div>
+        
+        
+            <div>
+                博客已运行 <span class="odometer" id="runtime_days" ></span> 天 <span class="odometer" id="runtime_hours"></span> 小时 <span class="odometer" id="runtime_minutes"></span> 分钟 <span class="odometer" id="runtime_seconds"></span> 秒
+            </div>
+        
+        
+            <script data-swup-reload-script>
+                try {
+                    function odometer_init() {
+                    const elements = document.querySelectorAll('.odometer');
+                    elements.forEach(el => {
+                        new Odometer({
+                            el,
+                            format: '( ddd).dd',
+                            duration: 200
+                        });
+                    });
+                    }
+                    odometer_init();
+                } catch (error) {}
+            </script>
+        
+        
+        
+    </div>  
+</footer>
+        </div>
+    </div>
+
+    
+        <div class="post-tools">
+            <div class="post-tools-container">
+    <ul class="article-tools-list">
+        <!-- TOC aside toggle -->
+        
+            <li class="right-bottom-tools page-aside-toggle">
+                <i class="fa-regular fa-outdent"></i>
+            </li>
+        
+
+        <!-- go comment -->
+        
+            <li class="go-comment">
+                <i class="fa-regular fa-comments"></i>
+            </li>
+        
+    </ul>
+</div>
+
+        </div>
+    
+
+    <div class="right-side-tools-container">
+        <div class="side-tools-container">
+    <ul class="hidden-tools-list">
+        <li class="right-bottom-tools tool-font-adjust-plus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-plus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-font-adjust-minus flex justify-center items-center">
+            <i class="fa-regular fa-magnifying-glass-minus"></i>
+        </li>
+
+        <li class="right-bottom-tools tool-dark-light-toggle flex justify-center items-center">
+            <i class="fa-regular fa-moon"></i>
+        </li>
+
+        <!-- rss -->
+        
+
+        
+
+        <li class="right-bottom-tools tool-scroll-to-bottom flex justify-center items-center">
+            <i class="fa-regular fa-arrow-down"></i>
+        </li>
+    </ul>
+
+    <ul class="visible-tools-list">
+        <li class="right-bottom-tools toggle-tools-list flex justify-center items-center">
+            <i class="fa-regular fa-cog fa-spin"></i>
+        </li>
+        
+            <li class="right-bottom-tools tool-scroll-to-top flex justify-center items-center">
+                <i class="arrow-up fas fa-arrow-up"></i>
+                <span class="percent"></span>
+            </li>
+        
+        
+    </ul>
+</div>
+
+    </div>
+
+    <div class="image-viewer-container">
+    <img src="">
+</div>
+
+
+    
+        <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+          <span class="search-input-field-pre">
+            <i class="fa-solid fa-keyboard"></i>
+          </span>
+            <div class="search-input-container">
+                <input autocomplete="off"
+                       autocorrect="off"
+                       autocapitalize="off"
+                       placeholder="搜索..."
+                       spellcheck="false"
+                       type="search"
+                       class="search-input"
+                >
+            </div>
+            <span class="popup-btn-close">
+                <i class="fa-solid fa-times"></i>
+            </span>
+        </div>
+        <div id="search-result">
+            <div id="no-result">
+                <i class="fa-solid fa-spinner fa-spin-pulse fa-5x fa-fw"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+</main>
+
+
+    
+<script src="/js/libs/Swup.min.js"></script>
+
+<script src="/js/libs/SwupSlideTheme.min.js"></script>
+
+<script src="/js/libs/SwupScriptsPlugin.min.js"></script>
+
+<script src="/js/libs/SwupProgressPlugin.min.js"></script>
+
+<script src="/js/libs/SwupScrollPlugin.min.js"></script>
+
+<script src="/js/libs/SwupPreloadPlugin.min.js"></script>
+
+<script>
+    const swup = new Swup({
+        plugins: [
+            new SwupScriptsPlugin({
+                optin: true,
+            }),
+            new SwupProgressPlugin(),
+            new SwupScrollPlugin({
+                offset: 80,
+            }),
+            new SwupSlideTheme({
+                mainElement: ".main-content-body",
+            }),
+            new SwupPreloadPlugin(),
+        ],
+        containers: ["#swup"],
+    });
+</script>
+
+
+
+
+
+
+
+<script src="/js/tools/imageViewer.js" type="module"></script>
+
+<script src="/js/utils.js" type="module"></script>
+
+<script src="/js/main.js" type="module"></script>
+
+<script src="/js/layouts/navbarShrink.js" type="module"></script>
+
+<script src="/js/tools/scrollTopBottom.js" type="module"></script>
+
+<script src="/js/tools/lightDarkSwitch.js" type="module"></script>
+
+<script src="/js/layouts/categoryList.js" type="module"></script>
+
+
+
+    
+<script src="/js/tools/localSearch.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/codeBlock.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/layouts/lazyload.js" type="module"></script>
+
+
+
+
+    
+<script src="/js/tools/runtime.js"></script>
+
+    
+<script src="/js/libs/odometer.min.js"></script>
+
+    
+<link rel="stylesheet" href="/assets/odometer-theme-minimal.css">
+
+
+
+
+  
+<script src="/js/libs/Typed.min.js"></script>
+
+  
+<script src="/js/plugins/typed.js" type="module"></script>
+
+
+
+
+
+
+
+
+
+<div class="post-scripts" data-swup-reload-script>
+    
+        
+<script src="/js/tools/tocToggle.js" type="module"></script>
+
+<script src="/js/layouts/toc.js" type="module"></script>
+
+<script src="/js/plugins/tabs.js" type="module"></script>
+
+    
+</div>
+
+
+</body>
+</html>
