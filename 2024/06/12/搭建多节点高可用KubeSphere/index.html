@@ -25,22 +25,22 @@
 <meta property="og:site_name" content="阿一的学习笔记">
 <meta property="og:description" content="KubeSphere官方文档：https:&#x2F;&#x2F;kubesphere.io&#x2F;zh&#x2F;docs&#x2F;v3.4&#x2F;installing-on-linux&#x2F;high-availability-configurations&#x2F;internal-ha-configuration&#x2F;  环境准备Docker安装您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 D">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717484165812-2473f6ef-d0a6-4ad6-a04c-44cc0c951f1b.png#averageHue=%23f6f6f6&clientId=u5303735a-8da3-4&from=paste&id=udf1fcfb3&originHeight=815&originWidth=1080&originalType=url&ratio=1.125&rotation=0&showTitle=false&size=175710&status=done&style=none&taskId=uf7327a43-1413-4eb0-b909-3fee7cfef32&title=">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717378190971-5c59d4cf-7af2-434c-9805-9480ec7cc54a.png#averageHue=%2338332e&clientId=u4b77f422-f21f-4&from=paste&height=178&id=mkldZ&originHeight=200&originWidth=556&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=24506&status=done&style=none&taskId=ud5bab20b-a77f-4e1e-8d37-764ca799715&title=&width=494.22222222222223">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717379257820-98107473-930d-4104-8a5f-3018b3867d30.png#averageHue=%232d2825&clientId=u4b77f422-f21f-4&from=paste&height=362&id=ufcbcc076&originHeight=407&originWidth=1099&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=74022&status=done&style=none&taskId=uad6d576d-08f2-4d91-a6be-d5e40cd67db&title=&width=976.8888888888889">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717381210457-c10e9aba-e3db-40bf-9f58-60137bc86d08.png#averageHue=%23262321&clientId=u4b77f422-f21f-4&from=paste&height=244&id=CX5WO&originHeight=274&originWidth=407&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=18347&status=done&style=none&taskId=u8e25e560-6514-4854-a2fd-f17b54d92d6&title=&width=361.77777777777777">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717408078535-02ae339f-c7de-4619-a50c-b1c373e66190.png#averageHue=%231d1d1c&clientId=u97dd61fa-e0a4-4&from=paste&height=618&id=eakog&originHeight=847&originWidth=502&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=21818&status=done&style=none&taskId=ue74db0ce-5110-4f58-b08e-2f1239c6038&title=&width=366.22222900390625">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717461860899-3e7f855d-dee2-463d-bf6d-c7bb3a1bb050.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=743&id=ub8d739cd&originHeight=836&originWidth=1156&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=89204&status=done&style=none&taskId=uce32f209-67ac-4589-ad35-7bd07f3fbeb&title=&width=1027.5555555555557">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462050308-a9f67c18-2784-4dd8-9b29-1f59ef937760.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=315&id=u7f5194cd&originHeight=354&originWidth=451&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=17123&status=done&style=none&taskId=ue1b4a48f-fed0-4930-9d98-c63d29b7d72&title=&width=400.8888888888889">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462144081-47cca6da-db80-48bd-9ef0-3042ffa6cccd.png#averageHue=%23201f1e&clientId=u466b5c74-7be6-4&from=paste&height=759&id=ub7775adb&originHeight=854&originWidth=1269&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=94688&status=done&style=none&taskId=u3981adc0-c8d9-49a9-9be9-7dd719c2ee0&title=&width=1128">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483569814-40ac670f-a761-45cd-b92e-81f609c67d0b.png#averageHue=%23222120&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=uf1a6b0de&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=99271&status=done&style=none&taskId=ufce2965e-a2f4-4cb9-b3f6-6b03c35c675&title=&width=1435.5555555555557">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483539099-0e41ac8c-7567-4feb-bad3-8f197c067ec4.png#averageHue=%23ecf1f6&clientId=ucfec1ca5-de20-4&from=paste&height=782&id=u47757bd6&originHeight=880&originWidth=1920&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=59129&status=done&style=none&taskId=u4897a86e-f06a-421f-87fc-3663eeb3c30&title=&width=1706.6666666666667">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483711945-871420d1-18e6-4cfc-95be-03a16e0d24ee.png#averageHue=%23242221&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=ucfd102b8&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=131296&status=done&style=none&taskId=ufe20d180-dd80-43b1-b3e5-4b12ec63dc6&title=&width=1435.5555555555557">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube1.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube2.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube3.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube4.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube5.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube6.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube7.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube8.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube9.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube10.png">
+<meta property="og:image" content="http://jiangii.github.io/kubesphere/kube11.png">
 <meta property="article:published_time" content="2024-06-12T10:33:19.944Z">
-<meta property="article:modified_time" content="2024-06-12T10:37:31.766Z">
+<meta property="article:modified_time" content="2024-06-27T07:05:18.231Z">
 <meta property="article:author" content="阿一">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717484165812-2473f6ef-d0a6-4ad6-a04c-44cc0c951f1b.png#averageHue=%23f6f6f6&clientId=u5303735a-8da3-4&from=paste&id=udf1fcfb3&originHeight=815&originWidth=1080&originalType=url&ratio=1.125&rotation=0&showTitle=false&size=175710&status=done&style=none&taskId=uf7327a43-1413-4eb0-b909-3fee7cfef32&title=">
+<meta name="twitter:image" content="http://jiangii.github.io/kubesphere/kube1.png">
     
     
     <!--- Icon Part-->
@@ -473,8 +473,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-12 18:37:31</span>
-            <span class="mobile">2024-06-12 18:37:31</span>
+            <span class="desktop">2024-06-27 15:05:18</span>
+            <span class="mobile">2024-06-27 15:05:18</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -504,7 +504,7 @@
             <p>KubeSphere官方文档：<a class="link"   target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/" >https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a><br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717484165812-2473f6ef-d0a6-4ad6-a04c-44cc0c951f1b.png#averageHue=%23f6f6f6&clientId=u5303735a-8da3-4&from=paste&id=udf1fcfb3&originHeight=815&originWidth=1080&originalType=url&ratio=1.125&rotation=0&showTitle=false&size=175710&status=done&style=none&taskId=uf7327a43-1413-4eb0-b909-3fee7cfef32&title="
+                     data-src="/../kubesphere/kube1.png"
                       alt="image.png"
                 ></p>
 <h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><h3 id="Docker安装"><a href="#Docker安装" class="headerlink" title="Docker安装"></a>Docker安装</h3><p>您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 Docker。或者，您也可以在创建集群前手动安装 Docker 或其他容器运行时。</p>
@@ -512,17 +512,23 @@
 <p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717378190971-5c59d4cf-7af2-434c-9805-9480ec7cc54a.png#averageHue=%2338332e&clientId=u4b77f422-f21f-4&from=paste&height=178&id=mkldZ&originHeight=200&originWidth=556&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=24506&status=done&style=none&taskId=ud5bab20b-a77f-4e1e-8d37-764ca799715&title=&width=494.22222222222223"
+                     data-src="/../kubesphere/kube2.png"
                       alt="image.png"
-                ><br>:::info<br>当sudo apt-get update报错<br>:::<br><img  
+                ></p>
+<blockquote>
+<p>当sudo apt-get update报错</p>
+</blockquote>
+<p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717379257820-98107473-930d-4104-8a5f-3018b3867d30.png#averageHue=%232d2825&clientId=u4b77f422-f21f-4&from=paste&height=362&id=ufcbcc076&originHeight=407&originWidth=1099&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=74022&status=done&style=none&taskId=uad6d576d-08f2-4d91-a6be-d5e40cd67db&title=&width=976.8888888888889"
+                     data-src="/../kubesphere/kube3.png"
                       alt="image.png"
-                ><br>搜索了一下，大多数回答是说镜像错了，需要换镜像，但是测试后发现还是错误的，经过调研，发现那些回答都有问题，只是说要换源，没有说明镜像源要和系统版本一致，所以导致换了他们的源后还是错误的：<br>      例如：输入指令lsb_release -a 查看ubuntu的系统版本，在这里我的系统是22.04.3 LTS，注意后面的jammy这一个版本非常重要。<br><img  
+                ></p>
+<p>搜索了一下，大多数回答是说镜像错了，需要换镜像，但是测试后发现还是错误的，经过调研，发现那些回答都有问题，只是说要换源，没有说明镜像源要和系统版本一致，所以导致换了他们的源后还是错误的：<br>      例如：输入指令lsb_release -a 查看ubuntu的系统版本，在这里我的系统是22.04.3 LTS，注意后面的jammy这一个版本非常重要。</p>
+<p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717381210457-c10e9aba-e3db-40bf-9f58-60137bc86d08.png#averageHue=%23262321&clientId=u4b77f422-f21f-4&from=paste&height=244&id=CX5WO&originHeight=274&originWidth=407&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=18347&status=done&style=none&taskId=u8e25e560-6514-4854-a2fd-f17b54d92d6&title=&width=361.77777777777777"
+                     data-src="/../kubesphere/kube4.png"
                       alt="image.png"
                 ><br>查看阿里的镜像网站<a class="link"   target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/ubuntu" >https://developer.aliyun.com/mirror/ubuntu <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，发现有三个不一样的源，所以failed to fetch的 原因是镜像源和系统版本对不上 ，所以出现下载错误。<br>编辑相关配置内容vim &#x2F;etc&#x2F;apt&#x2F;sources.list，更换源，一定要选择与Codename对应的源地址</p>
 <div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure></div>
@@ -533,46 +539,55 @@
 <h2 id="下载KubeKey"><a href="#下载KubeKey" class="headerlink" title="下载KubeKey"></a>下载KubeKey</h2><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(Ubuntu把sh换为bash)</span><br><span class="line">curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 sh -</span><br><span class="line">curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 bash -</span><br><span class="line"></span><br><span class="line">chmod +x kk</span><br></pre></td></tr></table></figure></div>
 
 <h2 id="创建集群"><a href="#创建集群" class="headerlink" title="创建集群"></a>创建集群</h2><div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 查看版本</span><br><span class="line">./kk version --show-supported-k8s</span><br><span class="line"></span><br><span class="line"># 创建配置文件</span><br><span class="line">./kk create config --with-kubesphere v3.4.1 --with-kubernetes v1.23.10</span><br><span class="line"></span><br><span class="line"># 开始安装（多节点）</span><br><span class="line">./kk create cluster -f config-sample.yaml</span><br><span class="line"></span><br><span class="line"># 单节点直接启动这个./kk create cluster --with-kubernetes v1.23.10 --with-kubesphere v3.4.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 瞅瞅日志先啦</span><br><span class="line">kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l &#x27;app in (ks-install, ks-installer)&#x27; -o jsonpath=&#x27;&#123;.items[0].metadata.name&#125;&#x27;) -f</span><br><span class="line"></span><br><span class="line"># 之前超时的错误看到是443端口超时</span><br><span class="line">ufw status</span><br><span class="line">ufw allow 443</span><br></pre></td></tr></table></figure></div>
-<p>:::info</p>
+
+
+<blockquote>
 <ul>
 <li>安装 KubeSphere 3.4 的建议 Kubernetes 版本：v1.20.x、v1.21.x、v1.22.x、v1.23.x、* v1.24.x、* v1.25.x 和 * v1.26.x。带星号的版本可能出现边缘节点部分功能不可用的情况。因此，如需使用边缘节点，推荐安装 v1.23.x。如果不指定 Kubernetes 版本，KubeKey 将默认安装 Kubernetes v1.23.10。</li>
 <li>如果您在这一步的命令中不添加标志 –with-kubesphere，则不会部署 KubeSphere，只能使用配置文件中的 addons 字段安装，或者在您后续使用 .&#x2F;kk create cluster 命令时再次添加这个标志。</li>
-<li>如果您添加标志 –with-kubesphere 时不指定 KubeSphere 版本，则会安装最新版本的 KubeSphere。<br>:::<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717408078535-02ae339f-c7de-4619-a50c-b1c373e66190.png#averageHue=%231d1d1c&clientId=u97dd61fa-e0a4-4&from=paste&height=618&id=eakog&originHeight=847&originWidth=502&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=21818&status=done&style=none&taskId=ue74db0ce-5110-4f58-b08e-2f1239c6038&title=&width=366.22222900390625"
-                      alt="image.png"
-                ><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717461860899-3e7f855d-dee2-463d-bf6d-c7bb3a1bb050.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=743&id=ub8d739cd&originHeight=836&originWidth=1156&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=89204&status=done&style=none&taskId=uce32f209-67ac-4589-ad35-7bd07f3fbeb&title=&width=1027.5555555555557"
-                      alt="image.png"
-                ><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462050308-a9f67c18-2784-4dd8-9b29-1f59ef937760.png#averageHue=%23212020&clientId=u466b5c74-7be6-4&from=paste&height=315&id=u7f5194cd&originHeight=354&originWidth=451&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=17123&status=done&style=none&taskId=ue1b4a48f-fed0-4930-9d98-c63d29b7d72&title=&width=400.8888888888889"
-                      alt="image.png"
-                ><br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717462144081-47cca6da-db80-48bd-9ef0-3042ffa6cccd.png#averageHue=%23201f1e&clientId=u466b5c74-7be6-4&from=paste&height=759&id=ub7775adb&originHeight=854&originWidth=1269&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=94688&status=done&style=none&taskId=u3981adc0-c8d9-49a9-9be9-7dd719c2ee0&title=&width=1128"
-                      alt="image.png"
-                ></li>
+<li>如果您添加标志 –with-kubesphere 时不指定 KubeSphere 版本，则会安装最新版本的 KubeSphere。</li>
 </ul>
+</blockquote>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../kubesphere/kube5.png"
+                      alt="image.png"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../kubesphere/kube6.png"
+                      alt="image.png"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../kubesphere/kube7.png"
+                      alt="image.png"
+                ></p>
+<p><img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/../kubesphere/kube8.png"
+                      alt="image.png"
+                ></p>
 <p>报错<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483569814-40ac670f-a761-45cd-b92e-81f609c67d0b.png#averageHue=%23222120&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=uf1a6b0de&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=99271&status=done&style=none&taskId=ufce2965e-a2f4-4cb9-b3f6-6b03c35c675&title=&width=1435.5555555555557"
+                     data-src="/../kubesphere/kube9.png"
                       alt="image.png"
-                ><br>也能进去，但是登录报错<br><img  
+                ></p>
+<p>也能进去，但是登录报错<br><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483539099-0e41ac8c-7567-4feb-bad3-8f197c067ec4.png#averageHue=%23ecf1f6&clientId=ucfec1ca5-de20-4&from=paste&height=782&id=u47757bd6&originHeight=880&originWidth=1920&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=59129&status=done&style=none&taskId=u4897a86e-f06a-421f-87fc-3663eeb3c30&title=&width=1706.6666666666667"
+                     data-src="/../kubesphere/kube10.png"
                       alt="image.png"
-                ><br><img  
+                ></p>
+<p><img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="https://cdn.nlark.com/yuque/0/2024/png/42421545/1717483711945-871420d1-18e6-4cfc-95be-03a16e0d24ee.png#averageHue=%23242221&clientId=ucfec1ca5-de20-4&from=paste&height=759&id=ucfd102b8&originHeight=854&originWidth=1615&originalType=binary&ratio=1.125&rotation=0&showTitle=false&size=131296&status=done&style=none&taskId=ufe20d180-dd80-43b1-b3e5-4b12ec63dc6&title=&width=1435.5555555555557"
+                     data-src="/../kubesphere/kube11.png"
                       alt="image.png"
                 ></p>
 <p>编辑coredns配置<br>kubectl get configmap coredns -n kube-system -o yaml<br>kubectl edit cm coredns -n kube-system<br>重启server<br>kubectl -n kubesphere-system rollout restart deploy&#x2F;ks-apiserver</p>
@@ -590,7 +605,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2024-06-12 18:37:31
+                    :</strong> 2024-06-27 15:05:18
             </li>
         
         <li>
