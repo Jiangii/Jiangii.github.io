@@ -18,13 +18,15 @@
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="一、任务调度1.1、场景分析传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。 1*&#x2F;1 * * * * command  然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行 如索道异常订单的分析，需要依赖4个任务： 暂时无法在飞书文档外展示此内容 以及T+h的数据任务的增量数据默认依赖 暂时无法在飞书文档外展示此">
+        <meta name="description" content="一、任务调度1.1、场景分析传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。 1*&#x2F;1 * * * * command  然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行 如索道异常订单的分析，需要依赖4个任务： ​​ 以及T+h的数据任务的增量数据默认依赖 ​​ 所以，在大数据平台中，与常规业务系统不同，调度">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据平台调度方案">
 <meta property="og:url" content="http://jiangii.github.io/2024/08/07/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B0%83%E5%BA%A6%E6%96%B9%E6%A1%88/index.html">
 <meta property="og:site_name" content="阿一的学习笔记">
-<meta property="og:description" content="一、任务调度1.1、场景分析传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。 1*&#x2F;1 * * * * command  然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行 如索道异常订单的分析，需要依赖4个任务： 暂时无法在飞书文档外展示此内容 以及T+h的数据任务的增量数据默认依赖 暂时无法在飞书文档外展示此">
+<meta property="og:description" content="一、任务调度1.1、场景分析传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。 1*&#x2F;1 * * * * command  然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行 如索道异常订单的分析，需要依赖4个任务： ​​ 以及T+h的数据任务的增量数据默认依赖 ​​ 所以，在大数据平台中，与常规业务系统不同，调度">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://jiangii.github.io/assets/%E6%95%B0%E6%8D%AE%E8%B0%83%E5%BA%A61.png">
+<meta property="og:image" content="http://jiangii.github.io/assets/%E6%95%B0%E6%8D%AE%E8%B0%83%E5%BA%A62.png">
 <meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NTU4NDk3YmM4MTI4NWQ1YTRkM2Q2ZWJmZDcwZmFkZTRfRkpndFROWERJV202c1VJUGduaHhXMms2d0dKN3dxNjVfVG9rZW46S1ZCMGI4cnROb3lva1F4UHprbWNPWTBybjllXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
 <meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YjczYTBkZjNlOTRmMjIyYTY0NjlmZWE2YzhlNDM0NmNfdEo2dEpValJQeHR4TDB0ajFoSGtUblJKZUd4UG1TMWVfVG9rZW46UU5aZGI2MVhpbzNjZkJ4dVM5N2N2QTd5bmliXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
 <meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NzM2N2NlZTA1YTU1Yzg5ZDk3NTkwMGMxZTExYWEyYWRfTk1HUzNUaWVtNVdSV2V4WFIzTHFyeEFRZEtaQnJPYU9fVG9rZW46RzdKN2JRbUZhbzZoWUh4UU9mcWNoR3l4bnFkXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
@@ -34,10 +36,10 @@
 <meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWE3MWE5YzEyNTkwNWNjNWQ4ZTg5NDgwMGQzMDM1ZDFfYTJCa0RzOWE3ZW9zdnptME9uOEpvOE1TMzJuZVNsOVNfVG9rZW46U2VXZ2J2U2xOb1doTk14R0dYQWNuNW8xbkdhXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
 <meta property="og:image" content="http://jiangii.github.io/assets/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B0%83%E5%BA%A6%E6%96%B9%E6%A1%88-20240807141058-nleinrx.png">
 <meta property="article:published_time" content="2024-08-07T06:18:12.476Z">
-<meta property="article:modified_time" content="2024-08-07T06:19:16.156Z">
+<meta property="article:modified_time" content="2024-08-07T06:31:46.962Z">
 <meta property="article:author" content="阿一">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NTU4NDk3YmM4MTI4NWQ1YTRkM2Q2ZWJmZDcwZmFkZTRfRkpndFROWERJV202c1VJUGduaHhXMms2d0dKN3dxNjVfVG9rZW46S1ZCMGI4cnROb3lva1F4UHprbWNPWTBybjllXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta name="twitter:image" content="http://jiangii.github.io/assets/%E6%95%B0%E6%8D%AE%E8%B0%83%E5%BA%A61.png">
     
     
     <!--- Icon Part-->
@@ -470,8 +472,8 @@
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-08-07 14:19:16</span>
-            <span class="mobile">2024-08-07 14:19:16</span>
+            <span class="desktop">2024-08-07 14:31:46</span>
+            <span class="mobile">2024-08-07 14:31:46</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -503,9 +505,19 @@
 
 <p>然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行</p>
 <p>如索道异常订单的分析，需要依赖4个任务：</p>
-<p><strong>暂时无法在飞书文档外展示此内容</strong></p>
+<p>​<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/%E6%95%B0%E6%8D%AE%E8%B0%83%E5%BA%A61.png"
+                      alt="数据调度1"
+                >​</p>
 <p>以及T+h的数据任务的增量数据默认依赖</p>
-<p><strong>暂时无法在飞书文档外展示此内容</strong></p>
+<p>​<img  
+                     lazyload
+                     src="/images/loading.svg"
+                     data-src="/assets/%E6%95%B0%E6%8D%AE%E8%B0%83%E5%BA%A62.png"
+                      alt="数据调度2"
+                >​</p>
 <p>所以，在大数据平台中，与常规业务系统不同，调度系统的作用分为两部分：定时调度和依赖调度</p>
 <h2 id="1-2、现有框架"><a href="#1-2、现有框架" class="headerlink" title="1.2、现有框架"></a>1.2、现有框架</h2><p>大数据工作流的调度框架常见的有</p>
 <ul>
@@ -665,7 +677,7 @@
         
             <li>
                 <strong>更新于
-                    :</strong> 2024-08-07 14:19:16
+                    :</strong> 2024-08-07 14:31:46
             </li>
         
         <li>
