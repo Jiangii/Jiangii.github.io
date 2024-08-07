@@ -13,36 +13,31 @@
     
     <!--- Seo Part-->
     
-    <link rel="canonical" href="http://Jiangii.github.io/2024/06/12/分布式任务调度框架(powerjob与xxl-job对比)/"/>
+    <link rel="canonical" href="http://Jiangii.github.io/2024/08/07/数据平台调度方案/"/>
     <meta name="robots" content="index,follow">
     <meta name="googlebot" content="index,follow">
     <meta name="revisit-after" content="1 days">
     
-        <meta name="description" content="PowerJob 是新一代分布式 任务调度与计算框架，支持 CRON、API、固定频率、固定延迟等调度策略，提供工作流来编排任务解决依赖关系，能让您轻松完成作业的调度与繁杂任务的分布式计算。 为什么选择 PowerJob？当前市面上流行的作业调度框架有老牌的 Quartz、基于 Quartz 的 elastic-job 和原先基于 Quartz 后面移除依赖的 xxl-job，这里分别谈一些这些框">
+        <meta name="description" content="一、任务调度1.1、场景分析传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。 1*&#x2F;1 * * * * command  然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行 如索道异常订单的分析，需要依赖4个任务： 暂时无法在飞书文档外展示此内容 以及T+h的数据任务的增量数据默认依赖 暂时无法在飞书文档外展示此">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分布式任务调度框架(PowerJob与xxl-job对比)">
-<meta property="og:url" content="http://jiangii.github.io/2024/06/12/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6(PowerJob%E4%B8%8Exxl-job%E5%AF%B9%E6%AF%94)/index.html">
+<meta property="og:title" content="数据平台调度方案">
+<meta property="og:url" content="http://jiangii.github.io/2024/08/07/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B0%83%E5%BA%A6%E6%96%B9%E6%A1%88/index.html">
 <meta property="og:site_name" content="阿一的学习笔记">
-<meta property="og:description" content="PowerJob 是新一代分布式 任务调度与计算框架，支持 CRON、API、固定频率、固定延迟等调度策略，提供工作流来编排任务解决依赖关系，能让您轻松完成作业的调度与繁杂任务的分布式计算。 为什么选择 PowerJob？当前市面上流行的作业调度框架有老牌的 Quartz、基于 Quartz 的 elastic-job 和原先基于 Quartz 后面移除依赖的 xxl-job，这里分别谈一些这些框">
+<meta property="og:description" content="一、任务调度1.1、场景分析传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。 1*&#x2F;1 * * * * command  然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行 如索道异常订单的分析，需要依赖4个任务： 暂时无法在飞书文档外展示此内容 以及T+h的数据任务的增量数据默认依赖 暂时无法在飞书文档外展示此">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power2.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power3.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power4.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power5.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power6.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power7.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power8.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power9.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power10.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power11.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power12.png">
-<meta property="og:image" content="http://jiangii.github.io/powerjob/power13.png">
-<meta property="article:published_time" content="2024-06-12T10:44:00.908Z">
-<meta property="article:modified_time" content="2024-06-27T07:49:28.789Z">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NTU4NDk3YmM4MTI4NWQ1YTRkM2Q2ZWJmZDcwZmFkZTRfRkpndFROWERJV202c1VJUGduaHhXMms2d0dKN3dxNjVfVG9rZW46S1ZCMGI4cnROb3lva1F4UHprbWNPWTBybjllXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YjczYTBkZjNlOTRmMjIyYTY0NjlmZWE2YzhlNDM0NmNfdEo2dEpValJQeHR4TDB0ajFoSGtUblJKZUd4UG1TMWVfVG9rZW46UU5aZGI2MVhpbzNjZkJ4dVM5N2N2QTd5bmliXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NzM2N2NlZTA1YTU1Yzg5ZDk3NTkwMGMxZTExYWEyYWRfTk1HUzNUaWVtNVdSV2V4WFIzTHFyeEFRZEtaQnJPYU9fVG9rZW46RzdKN2JRbUZhbzZoWUh4UU9mcWNoR3l4bnFkXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YjQwNTU4ZGJhYTk5YjE0ZmVjN2NiZGQxYzJjNzhmZTVfbHNsa0FjcjVuMzQxcEs3YllIRm1ycUU1MVpnNTE5NlJfVG9rZW46R2dBQWJvaXo0bzZIOUN4YlYwSWNpWGtYbmhyXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NzFjNDU5YWE4MTkzNjQ3MGJhMjY3MWY3ZTFjYTM1ZTFfUkRzcFduaE8yeUR6Q0JXNzlwOWNaUFQ4YUJiTkd2c01fVG9rZW46Qk5KbGJvQ2lSb2JvV0R4RVhiN2NYdmlxbjRmXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YTViYTZkYTJmYjc3ODIzNGNhM2VhNzMxMzA1MWMxYTJfNHN5anRMWkpaUTRNYVZDZFNmNktIbDJPdTNISW9LVmZfVG9rZW46RDV4Y2JyYWg1b2hSUTd4dGhsSGNMNHJvbjE1XzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWE3MWE5YzEyNTkwNWNjNWQ4ZTg5NDgwMGQzMDM1ZDFfYTJCa0RzOWE3ZW9zdnptME9uOEpvOE1TMzJuZVNsOVNfVG9rZW46U2VXZ2J2U2xOb1doTk14R0dYQWNuNW8xbkdhXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
+<meta property="og:image" content="http://jiangii.github.io/assets/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B0%83%E5%BA%A6%E6%96%B9%E6%A1%88-20240807141058-nleinrx.png">
+<meta property="article:published_time" content="2024-08-07T06:18:12.476Z">
+<meta property="article:modified_time" content="2024-08-07T06:19:16.156Z">
 <meta property="article:author" content="阿一">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://jiangii.github.io/powerjob/power.png">
+<meta name="twitter:image" content="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NTU4NDk3YmM4MTI4NWQ1YTRkM2Q2ZWJmZDcwZmFkZTRfRkpndFROWERJV202c1VJUGduaHhXMms2d0dKN3dxNjVfVG9rZW46S1ZCMGI4cnROb3lva1F4UHprbWNPWTBybjllXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA">
     
     
     <!--- Icon Part-->
@@ -54,7 +49,7 @@
     
     <title>
         
-            分布式任务调度框架(PowerJob与xxl-job对比) -
+            数据平台调度方案 -
         
         阿一的学习笔记
     </title>
@@ -447,7 +442,7 @@
         <div class="article-title relative w-full">
             
                 <div class="w-full flex items-center pt-6 justify-start">
-                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">分布式任务调度框架(PowerJob与xxl-job对比)</h1>
+                    <h1 class="article-title-regular text-second-text-color text-4xl md:text-6xl font-bold px-2 sm:px-6 md:px-8 py-3">数据平台调度方案</h1>
                 </div>
             
             </div>
@@ -468,15 +463,15 @@
                         <div class="article-meta-info">
     <span class="article-date article-meta-item">
         <i class="fa-regular fa-pen-fancy"></i>&nbsp;
-        <span class="desktop">2024-06-12 18:44</span>
-        <span class="mobile">2024-06-12 18:44</span>
+        <span class="desktop">2024-08-07 14:18:12</span>
+        <span class="mobile">2024-08-07 14:18:12</span>
         <span class="hover-info">创建</span>
     </span>
     
         <span class="article-date article-meta-item">
             <i class="fa-regular fa-wrench"></i>&nbsp;
-            <span class="desktop">2024-06-27 15:49:28</span>
-            <span class="mobile">2024-06-27 15:49:28</span>
+            <span class="desktop">2024-08-07 14:19:16</span>
+            <span class="mobile">2024-08-07 14:19:16</span>
             <span class="hover-info">更新</span>
         </span>
     
@@ -503,110 +498,159 @@
 
 
         <div class="article-content markdown-body px-2 sm:px-6 md:px-8 pb-8">
-            <p>PowerJob 是新一代<a class="link"   target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E5%88%86%E5%B8%83%E5%BC%8F&spm=1001.2101.3001.7020" >分布式 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>任务调度与计算框架，支持 CRON、API、固定频率、固定延迟等调度策略，提供工作流来编排任务解决依赖关系，能让您轻松完成作业的调度与繁杂任务的分布式计算。</p>
-<h5 id="为什么选择-PowerJob？"><a href="#为什么选择-PowerJob？" class="headerlink" title="为什么选择 PowerJob？"></a>为什么选择 PowerJob？</h5><p>当前市面上流行的作业调度框架有老牌的 Quartz、基于 Quartz 的 elastic-job 和原先基于 Quartz 后面移除依赖的 xxl-job，这里分别谈一些这些框架现存的缺点。<br>Quartz 可以视为第一代任务调度框架，基本上是现有所有分布式调度框架的“祖宗”。由于历史原因，它不提供 Web 界面，只能通过 API 完成任务的配置，使用起来不够方便和灵活，同时它仅支持单机执行，无法有效利用整个集群的计算能力。<br>xxl-job 可以视为第二代任务调度框架，在一定程度上解决了 Quartz 的不足，在过去几年中是个非常优秀的调度框架，不过放到今天来看，还是存在着一些不足的，具体如下：</p>
+            <h1 id="一、任务调度"><a href="#一、任务调度" class="headerlink" title="一、任务调度"></a>一、任务调度</h1><h2 id="1-1、场景分析"><a href="#1-1、场景分析" class="headerlink" title="1.1、场景分析"></a>1.1、场景分析</h2><p>传统的业务系统调度基于计划的时间完成任务，实现业务处理动作。如XXL-JOB等手段。</p>
+<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*/1 * * * * command</span><br></pre></td></tr></table></figure></div>
+
+<p>然而在大数据平台的调度中，多个任务单元之间往往有着强依赖关系，上游任务执行并成功，下游任务才可以执行</p>
+<p>如索道异常订单的分析，需要依赖4个任务：</p>
+<p><strong>暂时无法在飞书文档外展示此内容</strong></p>
+<p>以及T+h的数据任务的增量数据默认依赖</p>
+<p><strong>暂时无法在飞书文档外展示此内容</strong></p>
+<p>所以，在大数据平台中，与常规业务系统不同，调度系统的作用分为两部分：定时调度和依赖调度</p>
+<h2 id="1-2、现有框架"><a href="#1-2、现有框架" class="headerlink" title="1.2、现有框架"></a>1.2、现有框架</h2><p>大数据工作流的调度框架常见的有</p>
 <ul>
-<li>数据库支持单一：仅支持 MySQL，使用其他 DB 需要自己魔改代码</li>
-<li>有限的分布式计算能力：仅支持静态分片，无法很好的完成复杂任务的计算</li>
-<li>不支持工作流：无法配置各个任务之间的依赖关系，不适用于有 DAG 需求的场景</li>
+<li>Apache Oozie</li>
+<li>Azkaban</li>
+<li>Airflow</li>
+<li>DolphinScheduler</li>
 </ul>
-<p>正所谓长江后浪推前浪，在如今这个数据量日益增长、业务越来越复杂的年代，急需一款更为强大的任务调度框架来解决上诉问题，而 PowerJob 因此应运而生。<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../powerjob/power.png"
-                     
-                ></p>
-<p>PowerJob 可以被认为是第三代任务调度框架，在任务调度的基础上，还额外提供了分布式计算和工作流功能，其主要特性如下：</p>
+<h3 id="1-2-1-Apache-Oozie"><a href="#1-2-1-Apache-Oozie" class="headerlink" title="1.2.1 Apache Oozie"></a>1.2.1 Apache Oozie</h3><p>优点:</p>
 <ul>
-<li>使用简单：提供前端 Web 界面，允许开发者可视化地完成调度任务的管理（增、删、改、查）、任务运行状态监控和运行日志查看等功能。</li>
-<li>定时策略完善：支持 CRON 表达式、固定频率、固定延迟和 API 四种定时调度策略。</li>
-<li>执行模式丰富：支持单机、广播、Map、MapReduce 四种执行模式，其中 Map&#x2F;MapReduce 处理器能使开发者寥寥数行代码便获得集群分布式计算的能力。</li>
-<li>DAG 工作流支持：支持在线配置任务依赖关系，可视化得对任务进行编排，同时还支持上下游任务间的数据传递</li>
-<li>执行器支持广泛：支持 Spring Bean、内置&#x2F;外置 Java 类、Shell、Python 等处理器，应用范围广。</li>
-<li>运维便捷：支持在线日志功能，执行器产生的日志可以在前端控制台页面实时显示，降低 debug 成本，极大地提高开发效率。</li>
-<li>依赖精简：最小仅依赖关系型数据库（MySQL&#x2F;PostgreSQL&#x2F;Oracle&#x2F;MS SQLServer…），同时支持所有 Spring Data JPA 所支持的关系型数据库。</li>
-<li>高可用&amp;高性能：调度服务器经过精心设计，一改其他调度框架基于数据库锁的策略，实现了无锁化调度。部署多个调度服务器可以同时实现高可用和性能的提升（支持无限的水平扩展）。</li>
-<li>故障转移与恢复：任务执行失败后，可根据配置的重试策略完成重试，只要执行器集群有足够的计算节点，任务就能顺利完成。</li>
+<li>与Hadoop生态系统深度集成： Oozie最初设计用于Hadoop，因此对Hadoop MapReduce、Pig、Hive等组件有很好的支持。</li>
+<li>强大的依赖管理： 支持复杂的依赖关系和调度策略，适合需要复杂依赖关系的任务调度。</li>
+<li>稳定性强： 作为Apache顶级项目，Oozie在大规模生产环境中被广泛使用，稳定性高。</li>
 </ul>
-<h5 id="同类产品对比"><a href="#同类产品对比" class="headerlink" title="同类产品对比"></a>同类产品对比</h5><p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../powerjob/power2.png"
-                     
-                ></p>
-<h5 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h5><ul>
-<li>有定时执行需求的业务场景：如每天凌晨全量同步数据、生成业务报表等。</li>
-<li>有需要全部机器一同执行的业务场景：如使用广播执行模式清理集群日志。</li>
-<li>有需要分布式处理的业务场景：比如需要更新一大批数据，单机执行耗时非常长，可以使用 Map&#x2F;MapReduce 处理器完成任务的分发，调动整个集群加速计算。</li>
+<p>缺点:</p>
+<ul>
+<li>配置复杂： 使用XML来定义工作流和协调作业，对于新用户来说可能不太友好。</li>
+<li>灵活性和扩展性相对较低： 相比其他现代工作流引擎，Oozie在动态工作流和跨平台支持方面稍显不足。</li>
 </ul>
-<h5 id="整体架构"><a href="#整体架构" class="headerlink" title="整体架构"></a>整体架构</h5><p><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../powerjob/power3.png"
-                     
-                ></p>
-<h5 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h5><ul>
-<li>项目地址：<a class="link"   target="_blank" rel="noopener" href="https://github.com/KFCFans/PowerJob" >https://github.com/KFCFans/PowerJob <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
-<li>官方文档：<a class="link"   target="_blank" rel="noopener" href="https://www.yuque.com/powerjob/guidence/intro" >https://www.yuque.com/powerjob/guidence/intro <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
-<li>在线试用：<a class="link"   target="_blank" rel="noopener" href="https://www.yuque.com/powerjob/guidence/trial" >https://www.yuque.com/powerjob/guidence/trial <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></li>
+<h3 id="1-2-2-Azkaban"><a href="#1-2-2-Azkaban" class="headerlink" title="1.2.2 Azkaban"></a>1.2.2 Azkaban</h3><p>优点:</p>
+<ul>
+<li>易用性较好： 提供了直观的Web UI，便于管理和监控工作流。</li>
+<li>简单灵活： 通过简单的job配置文件定义任务，易于上手。</li>
+<li>适合小到中型项目： 对于不需要复杂依赖管理的场景，Azkaban是一个轻量级的选择。</li>
 </ul>
-<h4 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h4><p>PowerJob 由调度服务器（powerjob-server）和执行器(powerjob-worker)两部分组成，powerjob-server 负责提供 Web 服务和完成任务的调度，powerjob-worker 则负责执行用户所编写的任务代码，同时提供分布式计算能力。</p>
-<h5 id="初始化项目"><a href="#初始化项目" class="headerlink" title="初始化项目"></a>初始化项目</h5><p>1、克隆项目到本地</p>
-<div class="highlight-container" data-rel="Plaintext"><figure class="iseeu highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/KFCFans/PowerJob.git</span><br></pre></td></tr></table></figure></div>
-<p>2、导入 IDE，源码结构如下，我们需要启动调度服务器（powerjob-server），同时在 samples 工程中编写自己的处理器代码<br><img  
+<p>缺点:</p>
+<ul>
+<li>功能相对有限： 相比于Airflow和DolphinScheduler，Azkaban的功能较为基础，对于复杂工作流的处理能力有限。</li>
+<li>配置复杂: 任务必须通过打一个zip包来进行实现</li>
+</ul>
+<h3 id="1-2-3-Airflow"><a href="#1-2-3-Airflow" class="headerlink" title="1.2.3 Airflow"></a>1.2.3 Airflow</h3><p>优点:</p>
+<ul>
+<li>高度可编程性和灵活性： 使用Python编写工作流，对于数据工程师非常友好，可以轻松实现复杂逻辑。</li>
+<li>活跃的社区支持： Airflow拥有庞大的用户群和活跃的开源社区，持续贡献新插件和特性。</li>
+<li>丰富的连接器和操作符： 支持大量数据源和服务的连接，易于与其他系统集成。</li>
+</ul>
+<p>缺点:</p>
+<ul>
+<li>资源消耗较高： 在大规模部署时，由于其基于Celery或Kubernetes的执行模式，可能会消耗较多计算和存储资源。</li>
+<li>运维复杂度： 高度的灵活性也意味着运维复杂度相对较高，特别是在规模扩大时。</li>
+</ul>
+<h3 id="1-2-4-DolphinScheduler"><a href="#1-2-4-DolphinScheduler" class="headerlink" title="1.2.4 DolphinScheduler"></a>1.2.4 DolphinScheduler</h3><p>优点:</p>
+<ul>
+<li>图形化界面： 提供了直观的Web UI进行工作流设计和管理，降低了使用门槛。</li>
+<li>高性能和高可用性： 设计上注重性能优化，支持分布式部署，保证系统的稳定性和高可用性。</li>
+<li>支持多种任务类型： 不仅支持大数据生态中的任务，还涵盖了Shell、SQL等多种任务类型，适用范围广。</li>
+</ul>
+<p>缺点:</p>
+<ul>
+<li>相对年轻： 相比Oozie和Airflow，DolphinScheduler是一个较新的项目，社区和生态还在发展中。</li>
+<li>国际化程度： 虽然在中文社区中有较好的影响力，但国际市场的文档和社区支持可能不如其他几个项目成熟。</li>
+</ul>
+<p>显然，我们只需要对Airflow 和 DolphinScheduler 做对比，选择合适的方案。</p>
+<h2 id="1-3、方案选择"><a href="#1-3、方案选择" class="headerlink" title="1.3、方案选择"></a>1.3、方案选择</h2><p>简而言之，airflow是使用Python编写工作流，DolphinScheduler 开放的api是 java的，我们是用java，所以选择DolphinScheduler 。</p>
+<h2 id="1-4、方案概述"><a href="#1-4、方案概述" class="headerlink" title="1.4、方案概述"></a>1.4、方案概述</h2><p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power4.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NTU4NDk3YmM4MTI4NWQ1YTRkM2Q2ZWJmZDcwZmFkZTRfRkpndFROWERJV202c1VJUGduaHhXMms2d0dKN3dxNjVfVG9rZW46S1ZCMGI4cnROb3lva1F4UHprbWNPWTBybjllXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ></p>
-<h5 id="启动调度服务器"><a href="#启动调度服务器" class="headerlink" title="启动调度服务器"></a>启动调度服务器</h5><p>1、创建数据库 powerjob-daily<br>2、修改配置文件，配置文件的说明官方文档写的非常详细，此处不再赘述。需要修改的地方为数据库配置spring.datasource.core.jdbc-url、spring.datasource.core.username和spring.datasource.core.password，当然，有 mongoDB 的同学也可以修改spring.data.mongodb.uri以获取完全版体验。<br><img  
+                >​</p>
+<p><strong>暂时无法在飞书文档外展示此内容</strong></p>
+<p>代码地址:<a class="link"   target="_blank" rel="noopener" href="https://gitee.com/dolphinscheduler/DolphinScheduler" >https://gitee.com/dolphinscheduler/DolphinScheduler <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<p>官方网站：<a class="link"   target="_blank" rel="noopener" href="https://dolphinscheduler.apache.org/zh-cn" >https://dolphinscheduler.apache.org/zh-cn <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a></p>
+<h1 id="二、资源调度"><a href="#二、资源调度" class="headerlink" title="二、资源调度"></a>二、资源调度</h1><h2 id="2-1、场景分析"><a href="#2-1、场景分析" class="headerlink" title="2.1、场景分析"></a>2.1、场景分析</h2><p>资源调度主要负责管理集群的计算资源（CPU、内存等），确保这些资源能够合理、高效地分配给需要执行的任务。它关注的是物理资源的分配和回收，以达到资源的最大化利用。</p>
+<p>一个集群调度工具有多个目的：使得集群的资源被高效利用，支持用户提供的配置约束（placement constraint），能够迅速调度应用以此保证它们不会处于待定状态（pending state），有一定程度的“公平”（fairness），具有一定的鲁棒性和可用性</p>
+<h2 id="2-2-现有框架"><a href="#2-2-现有框架" class="headerlink" title="2.2 现有框架"></a>2.2 现有框架</h2><h3 id="2-2-1Apache-YARN（Yet-Another-Resource-Negotiator）"><a href="#2-2-1Apache-YARN（Yet-Another-Resource-Negotiator）" class="headerlink" title="2.2.1Apache YARN（Yet Another Resource Negotiator）:"></a>2.2.1Apache YARN（Yet Another Resource Negotiator）:</h3><ul>
+<li>特点: YARN 是Hadoop生态系统的核心组件之一，专为大规模数据处理设计，提供了通用的资源管理框架。它支持多租户、高可用性，并能够有效管理集群资源，同时支持多种计算框架（如MapReduce, Spark, Flink等）。</li>
+<li>适用场景: 适用于已有的或计划构建基于Hadoop生态的大数据处理环境，尤其是当需要支持多种计算模型时。</li>
+</ul>
+<h3 id="2-2-2Kubernetes-K8s"><a href="#2-2-2Kubernetes-K8s" class="headerlink" title="2.2.2Kubernetes (K8s):"></a>2.2.2Kubernetes (K8s):</h3><ul>
+<li>特点: K8s 是一个开源的容器编排平台，起初为Docker容器设计，但现在已经支持其他容器运行时。它提供了强大的服务发现、负载均衡、自动扩缩容等功能，特别适合微服务架构和云原生应用。</li>
+<li>适用场景: 当企业已经采用或计划全面拥抱容器化和云原生技术栈时，Kubernetes是一个极佳的选择。它能很好地与大数据处理框架如Spark、Flink的容器化版本集成，提供高度灵活和可扩展的资源调度能力。</li>
+</ul>
+<h3 id="2-2-3-Apache-Mesos"><a href="#2-2-3-Apache-Mesos" class="headerlink" title="2.2.3 Apache Mesos:"></a>2.2.3 Apache Mesos:</h3><ul>
+<li>特点: Mesos 是一个分布式系统内核，提供有效的资源隔离和共享，支持多种工作负载类型。它通过两级调度架构，允许运行多个框架，如Marathon（长服务）、Chronos（定时任务）以及Mesos Native Docker集成。</li>
+<li>适用场景: 当组织需要在同一个集群上运行不同类型的作业，且这些作业具有多样化的资源需求时，Mesos是一个很好的选项。</li>
+</ul>
+<h3 id="2-2-4-Apache-Hadoop-MapReduce-v1"><a href="#2-2-4-Apache-Hadoop-MapReduce-v1" class="headerlink" title="2.2.4 Apache Hadoop MapReduce v1:"></a>2.2.4 Apache Hadoop MapReduce v1:</h3><ul>
+<li>特点: 虽然较旧，但在某些特定场景下仍有其应用价值，特别是对于那些已经稳定运行且不需要YARN提供的灵活性和高级功能的系统。</li>
+<li>适用场景: 对于维护成本较低、对新技术接纳度不高的成熟系统，或者对于简单的批处理作业来说，MapReduce v1可能仍然是一个可行的选择。</li>
+</ul>
+<h2 id="2-3方案选择"><a href="#2-3方案选择" class="headerlink" title="2.3方案选择"></a>2.3方案选择</h2><p>首先排除MapReduce 。没有价值</p>
+<p>从大数据生态来说，yarn相对成熟，k8s则是容器编排领域更强大的</p>
+<h3 id="2-3-1-mesos-和yarn"><a href="#2-3-1-mesos-和yarn" class="headerlink" title="2.3.1 mesos 和yarn"></a>2.3.1 mesos 和yarn</h3><p>优先对比Mesos和yarn，其实2者差别不大，都可以使用。</p>
+<p>在Mesos中，各种计算框架是完全融入Mesos中的，也就是说，如果你想在Mesos中添加一个新的计算框架，首先需要在Mesos中部署一套该框架；而在YARN中，各种框架作为client端的library使用，仅仅是你编写的程序的一个库，不需要事先部署一套该框架。从这点上说，YARN运行和使用起来更加方便。所以，优先选用yarn。</p>
+<p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power5.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YjczYTBkZjNlOTRmMjIyYTY0NjlmZWE2YzhlNDM0NmNfdEo2dEpValJQeHR4TDB0ajFoSGtUblJKZUd4UG1TMWVfVG9rZW46UU5aZGI2MVhpbzNjZkJ4dVM5N2N2QTd5bmliXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ><br>3、完成配置文件的修改后，可以直接通过启动类com.github.kfcfans.powerjob.server.OhMyApplication启动调度服务器，观察启动日志，查看是否启动成功～启动成功后，访问 <a class="link"   target="_blank" rel="noopener" href="http://127.0.0.1:7700/" >http://127.0.0.1:7700/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> ，如果能顺利出现 Web 界面，则说明调度服务器启动成功！<br>4、注册应用：点击主页<strong>应用注册</strong>按钮，填入 oms-test和控制台密码（用于进入控制台），注册示例应用（当然你也可以注册其他的 appName，只是别忘记在示例程序中同步修改～）<br><img  
+                >​</p>
+<p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power6.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NzM2N2NlZTA1YTU1Yzg5ZDk3NTkwMGMxZTExYWEyYWRfTk1HUzNUaWVtNVdSV2V4WFIzTHFyeEFRZEtaQnJPYU9fVG9rZW46RzdKN2JRbUZhbzZoWUh4UU9mcWNoR3l4bnFkXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ></p>
-<h5 id="编写示例代码"><a href="#编写示例代码" class="headerlink" title="编写示例代码"></a>编写示例代码</h5><p>进入示例工程（powerjob-worker-samples），修改配置文件连接 powerjob-server 并编写自己的处理器代码。<br>1、修改 powerjob-worker-samples 的启动配置类com.github.kfcfans.powerjob.samples.OhMySchedulerConfig，<strong>将AppName修改为刚刚在控制台注册的名称</strong>。<br><img  
+                >​</p>
+<p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power7.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YjQwNTU4ZGJhYTk5YjE0ZmVjN2NiZGQxYzJjNzhmZTVfbHNsa0FjcjVuMzQxcEs3YllIRm1ycUU1MVpnNTE5NlJfVG9rZW46R2dBQWJvaXo0bzZIOUN4YlYwSWNpWGtYbmhyXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ><br>2、编写自己的处理器：随便找个地方新建类，继承你想要使用的处理器（各个处理器的介绍可见官方文档，文档非常详细），这里为了简单演示，选择使用单机处理器BasicProcessor，以下是代码示例。<br><img  
+                >​</p>
+<h3 id="2-3-2-yarn跟-k8s"><a href="#2-3-2-yarn跟-k8s" class="headerlink" title="2.3.2 yarn跟 k8s"></a>2.3.2 yarn跟 k8s</h3><p>Kubernetes 和 YARN 各自具有独特的优势和不足。Kubernetes 的优势在于其灵活性、可扩展性和可靠性。它提供了丰富的功能，如自动部署、自动扩缩容、服务发现等，并支持多种容器运行时。此外，Kubernetes 还具有强大的社区支持和生态系统，使得用户可以轻松找到和集成各种工具和服务。</p>
+<p>然而，Kubernetes 的复杂性可能会成为其劣势，尤其是在入门和学习曲线方面。它需要一定的配置和管理，并且对于初学者来说可能具有挑战性。此外，Kubernetes 的资源占用和性能开销也可能成为一些小型项目的瓶颈。</p>
+<p>相比之下，YARN 的优势在于其高性能和低延迟的大数据处理能力。它能够处理大规模数据集，并提供了各种数据处理框架的支持，如 Hadoop <a class="link"   target="_blank" rel="noopener" href="https://cloud.baidu.com/product/bmr.html" >MapReduce <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>、Spark 和 Flink 等。此外，YARN 还具有简单易用的 API 和工具集，使得开发人员可以快速构建和管理大数据应用程序。</p>
+<p>然而，YARN 的局限性在于它主要关注大数据处理领域，与其他工具的集成可能不够灵活。此外，YARN 的设计决策和生态系统相对较小，与 Kubernetes 相比可能没有那么丰富的选择和生态系统。</p>
+<p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power8.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=NzFjNDU5YWE4MTkzNjQ3MGJhMjY3MWY3ZTFjYTM1ZTFfUkRzcFduaE8yeUR6Q0JXNzlwOWNaUFQ4YUJiTkd2c01fVG9rZW46Qk5KbGJvQ2lSb2JvV0R4RVhiN2NYdmlxbjRmXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ><br>3、启动示例程序，即直接运行主类com.github.kfcfans.powerjob.samples.SampleApplication，观察控制台输出信息，判断是否启动成功。</p>
-<h5 id="任务的配置与运行"><a href="#任务的配置与运行" class="headerlink" title="任务的配置与运行"></a>任务的配置与运行</h5><p>调度服务器与示例工程都启动完毕后，再次前往 Web 页面（ <a class="link"   target="_blank" rel="noopener" href="http://127.0.0.1:7700/" >http://127.0.0.1:7700/ <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> ），进行任务的配置与运行。<br>1、在首页输入框输入配置的应用名称，成功操作后会正式进入前端管理界面。<br><img  
+                >​</p>
+<p>但我们需要的是专注于高性能大数据处理的资源管理系统，YARN 是更好的选择。它提供了高效的大数据处理能力，适用于各种用例，并具有简单易用的 API 和工具集。</p>
+<p>其实目前有混合部署的方案，如小红书，采用了开源的Koordinator</p>
+<p>小红书是 Koordinator 社区的活跃成员，为了进一步丰富 Koordinator 支持的在离线混部场景，社区会同来自阿里云、小红书、<a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%9A%82%E8%9A%81%E9%87%91%E6%9C%8D&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%22667018810%22%7D" >蚂蚁金服 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>的开发者们共同启动了 Hadoop YARN 与 K8s 混部项目，支持将超卖的 Batch 资源提供给 Hadoop YARN 使用，进一步提升集群资源的使用效率，该项目目前已经在小红书生产环境正式投入使用。</p>
+<p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power9.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=YTViYTZkYTJmYjc3ODIzNGNhM2VhNzMxMzA1MWMxYTJfNHN5anRMWkpaUTRNYVZDZFNmNktIbDJPdTNISW9LVmZfVG9rZW46RDV4Y2JyYWg1b2hSUTd4dGhsSGNMNHJvbjE1XzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ><br>2、点击任务管理 -&gt; 新建任务（右上角），开始创建任务。<br><img  
+                >​</p>
+<p>ResourceManager 和 NodeManger 是 YARN 的核心组件，ResourceManager 在管控侧负责接收任务以及资源调度，NodeManager 负责任务的生命周期管理。在 YARN &amp; K8s 混部场景下，RM 将仍然作为 YARN 集群的核心组件独立部署，NM 将以容器的形式部署。</p>
+<p>Koordinator 新增了 <a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=koord-yarn-operator&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%22667018810%22%7D" >koord-yarn-operator <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 模块，负责将 Batch 资源量同步给 YARN RM。为了对资源进行更精细的管理，YARN task 将与 NM 的资源管理相互独立，NM 在部署时只需按自身开销申请 Batch 混部资源。YARN 任务的资源使用通过 cgroup 来管理（LinuxContainerExecutor 模式），将 cgroup 路径在 besteffort Pod QoS 下，确保可以和其他 K8s Pod 一样，统一在 besteffort 分组下管理。</p>
+<p><a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=koodlet&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%22667018810%22%7D" >koodlet <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 目前在单机支持了一系列的 QoS 策略，这些同样需要针对 YARN 场景进行适配。对于资源隔离参数，例如 Group Identity，Memory QoS，L3 Cache 隔离等，koordlet 将根据设计的 cgroup 层级进行适配。而对于驱逐和压制这类动态策略，koordlet 将新增一个 sidecar 模块 koord-yarn-copilot，用于对接 YARN 场景的各类数据和操作，包括 YARN task 元信息采集、资源指标采集、task 驱逐操作等，所有 QoS 策略仍然保留在 <a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=koordlet&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%22667018810%22%7D" >koordlet <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 内，koordlet 内部相关模块将以 plugin 形式对接 <a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=koord-yarn-copilot&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22article%22,%22sourceId%22:%22667018810%22%7D" >koord-yarn-copilot <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a> 接口。同时，koord-yarn-copilot 的接口设计将保留一定的扩展性，后续可用于对接其他资源框架。</p>
+<h2 id="2-4-方案概述"><a href="#2-4-方案概述" class="headerlink" title="2.4 方案概述"></a>2.4 方案概述</h2><p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power10.png"
+                     data-src="https://kis9g6x9wlo.feishu.cn/space/api/box/stream/download/asynccode/?code=ZWE3MWE5YzEyNTkwNWNjNWQ4ZTg5NDgwMGQzMDM1ZDFfYTJCa0RzOWE3ZW9zdnptME9uOEpvOE1TMzJuZVNsOVNfVG9rZW46U2VXZ2J2U2xOb1doTk14R0dYQWNuNW8xbkdhXzE3MjMwMTA4NDM6MTcyMzAxNDQ0M19WNA"
                      
-                ><br>3、完成任务创建后，即可在控制台看到刚才创建的任务，如果觉得等待调度太过于漫长，可以直接点击<strong>运行</strong>按钮，立即运行本任务。<br><img  
+                >​</p>
+<p>Yarn包括两个部分：一个是资源管理器（Resource Manager），一个是<a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%8A%82%E7%82%B9%E7%AE%A1%E7%90%86%E5%99%A8&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:%223397765637%22%7D" >节点管理器 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>（Node Manager）。这也是Yarn的两种主要进程：ResourceManager进程负责整个集群的资源调度管理，通常部署在独立的服务器上；NodeManager进程负责具体服务器上的资源和任务管理，在集群的每一台计算服务器上都会启动，基本上跟HDFS的DataNode进程一起出现</p>
+<p>工作流程：</p>
+<p>1.我们向Yarn提交<a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:%223397765637%22%7D" >应用程序 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，包括MapReduce ApplicationMaster、我们的MapReduce程序，以及MapReduce Application启动命令。</p>
+<p>2.ResourceManager进程和NodeManager<a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E8%BF%9B%E7%A8%8B%E9%80%9A%E4%BF%A1&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:%223397765637%22%7D" >进程通信 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>，根据集群资源，为用户程序分配第一个容器，并将MapReduce ApplicationMaster分发到这个容器上面，并在容器里面启动MapReduce ApplicationMaster。</p>
+<p>3.MapReduce ApplicationMaster启动后立即向ResourceManager进程注册，并为自己的应用程序申请容器资源。</p>
+<p>4.MapReduce ApplicationMaster申请到需要的容器后，立即和相应的NodeManager进程通信，将用户MapReduce程序分发到NodeManager进程所在服务器，并在容器中运行，运行的就是Map或者Reduce任务。</p>
+<p>5.Map或者Reduce任务在运行期和MapReduce ApplicationMaster通信，汇报自己的运行状态，如果运行结束，MapReduce ApplicationMaster向ResourceManager进程注销并释放所有的容器资源。</p>
+<p>MapReduce如果想在Yarn上运行，就需要开发遵循Yarn规范的MapReduce ApplicationMaster，相应地，其他<a class="link"   target="_blank" rel="noopener" href="https://www.zhihu.com/search?q=%E5%A4%A7%E6%95%B0%E6%8D%AE%E8%AE%A1%E7%AE%97%E6%A1%86%E6%9E%B6&search_source=Entity&hybrid_search_source=Entity&hybrid_search_extra=%7B%22sourceType%22:%22answer%22,%22sourceId%22:%223397765637%22%7D" >大数据计算框架 <i class="fa-regular fa-arrow-up-right-from-square fa-sm"></i></a>也可以开发遵循Yarn规范的ApplicationMaster，这样在一个Yarn集群中就可以同时并发执行各种不同的大数据计算框架，实现资源的统一调度管理</p>
+<p>​<img  
                      lazyload
                      src="/images/loading.svg"
-                     data-src="/../powerjob/power11.png"
-                     
-                ><br>4、前往<strong>任务示例</strong>边栏，查看任务的运行状态和在线日志<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../powerjob/power12.png"
-                     
-                ><br>基础的教程到这里也就结束了～更多功能示例可见官方文档，工作流、MapReduce、容器等高级特性等你来探索！<br><img  
-                     lazyload
-                     src="/images/loading.svg"
-                     data-src="/../powerjob/power13.png"
-                     
-                ></p>
+                     data-src="/assets/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B0%83%E5%BA%A6%E6%96%B9%E6%A1%88-20240807141058-nleinrx.png"
+                      alt="数据平台调度方案"
+                >​</p>
 
         </div>
 
@@ -614,18 +658,18 @@
             <div class="post-copyright-info w-full my-8 px-2 sm:px-6 md:px-8">
                 <div class="article-copyright-info-container">
     <ul>
-        <li><strong>标题:</strong> 分布式任务调度框架(PowerJob与xxl-job对比)</li>
+        <li><strong>标题:</strong> 数据平台调度方案</li>
         <li><strong>作者:</strong> 阿一</li>
         <li><strong>创建于
-                :</strong> 2024-06-12 18:44:00</li>
+                :</strong> 2024-08-07 14:18:12</li>
         
             <li>
                 <strong>更新于
-                    :</strong> 2024-06-27 15:49:28
+                    :</strong> 2024-08-07 14:19:16
             </li>
         
         <li>
-            <strong>链接:</strong> https://jiangii.github.io/2024/06/12/分布式任务调度框架(PowerJob与xxl-job对比)/
+            <strong>链接:</strong> https://jiangii.github.io/2024/08/07/数据平台调度方案/
         </li>
         <li>
             <strong>
@@ -650,29 +694,14 @@
         
             <div class="article-nav my-8 flex justify-between items-center px-2 sm:px-6 md:px-8">
                 
-                    <div class="article-prev border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
-                        <a class="prev"
-                        rel="prev"
-                        href="/2024/06/14/Mysql%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A%E8%BF%81%E7%A7%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%87%B4%E5%8F%A6%E4%B8%80%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/"
-                        >
-                            <span class="left arrow-icon flex justify-center items-center">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-                            <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Mysql数据库：迁移数据库致另一台服务器</span>
-                                <span class="post-nav-item">上一篇</span>
-                            </span>
-                        </a>
-                    </div>
-                
                 
                     <div class="article-next border-border-color shadow-redefine-flat shadow-shadow-color-2 rounded-medium px-4 py-2 hover:shadow-redefine-flat-hover hover:shadow-shadow-color-2">
                         <a class="next"
                         rel="next"
-                        href="/2024/06/12/%E6%90%AD%E5%BB%BA%E5%A4%9A%E8%8A%82%E7%82%B9%E9%AB%98%E5%8F%AF%E7%94%A8KubeSphere/"
+                        href="/2024/08/07/%E6%96%87%E6%97%85%E5%A4%A7%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B5%84%E6%BA%90%E5%87%86%E5%A4%87/"
                         >
                             <span class="title flex justify-center items-center">
-                                <span class="post-nav-title-item">Linux搭建多节点高可用KubeSphere</span>
+                                <span class="post-nav-title-item">文旅大数据平台资源准备</span>
                                 <span class="post-nav-item">下一篇</span>
                             </span>
                             <span class="right arrow-icon flex justify-center items-center">
@@ -735,8 +764,8 @@
             <div class="post-toc-wrap">
     <div class="post-toc">
         <div class="toc-title">此页目录</div>
-        <div class="page-title">分布式任务调度框架(PowerJob与xxl-job对比)</div>
-        
+        <div class="page-title">数据平台调度方案</div>
+        <ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6"><span class="nav-text">一、任务调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1%E3%80%81%E5%9C%BA%E6%99%AF%E5%88%86%E6%9E%90"><span class="nav-text">1.1、场景分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2%E3%80%81%E7%8E%B0%E6%9C%89%E6%A1%86%E6%9E%B6"><span class="nav-text">1.2、现有框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-Apache-Oozie"><span class="nav-text">1.2.1 Apache Oozie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-Azkaban"><span class="nav-text">1.2.2 Azkaban</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-Airflow"><span class="nav-text">1.2.3 Airflow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-4-DolphinScheduler"><span class="nav-text">1.2.4 DolphinScheduler</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3%E3%80%81%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="nav-text">1.3、方案选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4%E3%80%81%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0"><span class="nav-text">1.4、方案概述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E8%B5%84%E6%BA%90%E8%B0%83%E5%BA%A6"><span class="nav-text">二、资源调度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E3%80%81%E5%9C%BA%E6%99%AF%E5%88%86%E6%9E%90"><span class="nav-text">2.1、场景分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E7%8E%B0%E6%9C%89%E6%A1%86%E6%9E%B6"><span class="nav-text">2.2 现有框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1Apache-YARN%EF%BC%88Yet-Another-Resource-Negotiator%EF%BC%89"><span class="nav-text">2.2.1Apache YARN（Yet Another Resource Negotiator）:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2Kubernetes-K8s"><span class="nav-text">2.2.2Kubernetes (K8s):</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-Apache-Mesos"><span class="nav-text">2.2.3 Apache Mesos:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-Apache-Hadoop-MapReduce-v1"><span class="nav-text">2.2.4 Apache Hadoop MapReduce v1:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3%E6%96%B9%E6%A1%88%E9%80%89%E6%8B%A9"><span class="nav-text">2.3方案选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-mesos-%E5%92%8Cyarn"><span class="nav-text">2.3.1 mesos 和yarn</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-yarn%E8%B7%9F-k8s"><span class="nav-text">2.3.2 yarn跟 k8s</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E6%96%B9%E6%A1%88%E6%A6%82%E8%BF%B0"><span class="nav-text">2.4 方案概述</span></a></li></ol></li></ol>
 
     </div>
 </div>
