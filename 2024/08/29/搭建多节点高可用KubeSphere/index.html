@@ -61,20 +61,20 @@
     <!-- 正文 -->
     <div class="post-content">
         <p>KubeSphere官方文档：<a target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/">https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/</a><br>
-<img src="../kubesphere/kube1.png" alt="image.png"></p>
+<img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube1.png" alt="image.png"></p>
 <h2 id="环境准备">环境准备</h2>
 <h3 id="Docker安装">Docker安装</h3>
 <p>您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 Docker。或者，您也可以在创建集群前手动安装 Docker 或其他容器运行时。</p>
 <h3 id="依赖项准备">依赖项准备</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export KKZONE=cn</span><br><span class="line"></span><br><span class="line">#准备所需依赖环境</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install conntrack socat chrony ipset ebtables</span><br></pre></td></tr></table></figure>
-<p><img src="../kubesphere/kube2.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube2.png" alt="image.png"></p>
 <blockquote>
 <p>当sudo apt-get update报错</p>
 </blockquote>
-<p><img src="../kubesphere/kube3.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube3.png" alt="image.png"></p>
 <p>搜索了一下，大多数回答是说镜像错了，需要换镜像，但是测试后发现还是错误的，经过调研，发现那些回答都有问题，只是说要换源，没有说明镜像源要和系统版本一致，所以导致换了他们的源后还是错误的：<br>
 例如：输入指令lsb_release -a 查看ubuntu的系统版本，在这里我的系统是22.04.3 LTS，注意后面的jammy这一个版本非常重要。</p>
-<p><img src="../kubesphere/kube4.png" alt="image.png"><br>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube4.png" alt="image.png"><br>
 查看阿里的镜像网站<a target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/ubuntu">https://developer.aliyun.com/mirror/ubuntu</a>，发现有三个不一样的源，所以failed to fetch的 原因是镜像源和系统版本对不上 ，所以出现下载错误。<br>
 编辑相关配置内容vim /etc/apt/sources.list，更换源，一定要选择与Codename对应的源地址</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
@@ -93,15 +93,15 @@
 <li>如果您添加标志 --with-kubesphere 时不指定 KubeSphere 版本，则会安装最新版本的 KubeSphere。</li>
 </ul>
 </blockquote>
-<p><img src="../kubesphere/kube5.png" alt="image.png"></p>
-<p><img src="../kubesphere/kube6.png" alt="image.png"></p>
-<p><img src="../kubesphere/kube7.png" alt="image.png"></p>
-<p><img src="../kubesphere/kube8.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube5.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube6.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube7.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube8.png" alt="image.png"></p>
 <p>报错<br>
-<img src="../kubesphere/kube9.png" alt="image.png"></p>
+<img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube9.png" alt="image.png"></p>
 <p>也能进去，但是登录报错<br>
-<img src="../kubesphere/kube10.png" alt="image.png"></p>
-<p><img src="../kubesphere/kube11.png" alt="image.png"></p>
+<img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube10.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/kubesphere/kube11.png" alt="image.png"></p>
 <p>编辑coredns配置<br>
 kubectl get configmap coredns -n kube-system -o yaml<br>
 kubectl edit cm coredns -n kube-system<br>

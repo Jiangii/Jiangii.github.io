@@ -66,27 +66,27 @@
 <p>默认有三种网桥，小伙伴们可以自行去了解</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network ls</span><br></pre></td></tr></table></figure>
-<p><img src="../docker/docker1.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker1.png" alt="image.png"></p>
 <h3 id="创建用户自定义网络">创建用户自定义网络</h3>
 <blockquote>
 <p>docker启动容器时默认在bridge</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">docker network create --driver bridge --subnet 172.18.0.0/16 --gateway 172.18.0.1 [name]</span><br><span class="line"></span><br><span class="line">#参数解释</span><br><span class="line">--driver bridge 表示使用桥接模式</span><br><span class="line">--subnet 172.18.0.0/16 表示子网ip可以分配到 172.18.0.2到172.18.255.255</span><br><span class="line">--gateway 172.18.1.1 表示网关</span><br></pre></td></tr></table></figure>
-<p><img src="../docker/docker2.png" alt="image.png"><br>
-<img src="../docker/docker3.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker2.png" alt="image.png"><br>
+<img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker3.png" alt="image.png"></p>
 <h3 id="创建完成后进行查看网络">创建完成后进行查看网络</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#查看</span><br><span class="line">docker inspect [name]</span><br><span class="line">#删除</span><br><span class="line">docker network rm [name]</span><br></pre></td></tr></table></figure>
-<p><img src="../docker/docker4.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker4.png" alt="image.png"></p>
 <h2 id="创建镜像">创建镜像</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker pull [IMAGE_NAME]:[TAG]</span><br><span class="line"># [IMAGE_NAME] 是你想要拉取的镜像的名称，[TAG] 是镜像的标签</span><br><span class="line"># 通常代表了一个特定的版本或者状态。如果你不指定一个标签，默认会使用 latest 标签。</span><br><span class="line"></span><br><span class="line">docker pull openjdk:8-jre</span><br><span class="line"></span><br><span class="line">#改名</span><br><span class="line">docker tag ubuntu:latest my_ubuntu</span><br></pre></td></tr></table></figure>
-<p><img src="../docker/docker5.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker5.png" alt="image.png"></p>
 <h2 id="执行jar包">执行jar包</h2>
 <h3 id="检查准备条件是否完全">检查准备条件是否完全</h3>
 <p>在之前docker自定义的网络smart_tourism_platform下，保证docker容器可以访问宿主机的端口，保持通讯</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#查看宿主机ip地址</span><br><span class="line">ifconfig</span><br><span class="line"></span><br><span class="line">#查看防火墙开放端口</span><br><span class="line">ufw status</span><br><span class="line"></span><br><span class="line">#对docker自定义的网段开放</span><br><span class="line">ufw allow from [ip]</span><br></pre></td></tr></table></figure>
-<p><img src="../docker/docker6.png" alt="image.png"></p>
-<p><img src="../docker/docker7.png" alt="image.png"></p>
-<p><img src="../docker/docker8.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker6.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker7.png" alt="image.png"></p>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/docker/docker8.png" alt="image.png"></p>
 <h3 id="以system系统模块为例">以system系统模块为例</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t stp_m_system:1.1 .</span><br><span class="line">docker run --network=smart_tourism_platform -d -p [端口号]:[端口号] -v /logs/docker_service_log/smart_tourism_platform:/opt/smart_tourism_platform/logs stp_m_system:1.1</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># stp_auth  网关开启当前网段的ip</span><br><span class="line"># 创建 网桥 docker network create --driver bridge smart_tourism_platform</span><br><span class="line"># 日志存储地址 /logs/docker_service_log/smart_tourism_platform</span><br><span class="line"># 构建 docker build -t stp_m_system:1.1 .</span><br><span class="line"># docker run --network=smart_tourism_platform -d -p [端口号]:[端口号] -v /logs/docker_service_log/smart_tourism_platform:/opt/smart_tourism_platform/logs stp_m_system:1.1</span><br><span class="line">FROM  openjdk:8-jre</span><br><span class="line">MAINTAINER inspur</span><br><span class="line">VOLUME /logs/docker_service_log/smart_tourism_platform</span><br><span class="line">RUN mkdir -p /opt/smart_tourism_platform</span><br><span class="line">WORKDIR /opt/smart_tourism_platform</span><br><span class="line">ADD ./jar/inspur-modules-system.jar /opt/smart_tourism_platform/inspur-modules-system.jar</span><br><span class="line">ENTRYPOINT [&quot;java&quot;,&quot;-Xmx1024m&quot;,&quot;-jar&quot;,&quot;inspur-modules-system.jar&quot;]</span><br><span class="line">EXPOSE [端口号]</span><br></pre></td></tr></table></figure>
