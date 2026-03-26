@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Docker搭建Prometheus监控体系 - 阿一的学习笔记</title>
+    <meta name="description" content="">
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+                <script>
+                    const userPref = localStorage.getItem('theme');
+                    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (userPref === 'dark' || (!userPref && systemDark)) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                </script>
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body class="is-post">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div style="position: fixed; top: 24px; left: 24px; z-index: 100;">
+    <a href="/" class="back-btn">
+        <svg class="svg-icon" style="vertical-align: middle; margin-right: 4px; width: 16px; height: 16px;"
+            viewBox="0 0 24 24">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        放回桌面
+    </a>
+</div>
+
+<!-- 卡片 -->
+<article class="post-container module"
+    style="position: relative; margin: 80px auto 40px auto; transform: none; max-width: 800px; width: 90%; cursor: auto;">
+    <h1 style="font-size: 28px; margin-bottom: 8px;">Docker搭建Prometheus监控体系</h1>
+    <div class="post-meta" style="margin-bottom: 32px;">
+        发布于 2024.07.02
+            
+    </div>
+
+    <!-- 正文 -->
+    <div class="post-content">
+        <table>
+<thead>
+<tr>
+<th>修订内容</th>
+<th>版本号</th>
+<th>发布日期</th>
+<th>作者</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第一版发布</td>
+<td></td>
+<td></td>
+<td>Alan</td>
+</tr>
+</tbody>
+</table>
+<h2 id="1-部署Prometheus">1. 部署Prometheus</h2>
+<blockquote>
+<p>Prometheus是一个开源的系统监控和报警系统，现在已经加入到CNCF基金会，成为继k8s之后第二个在CNCF托管的项目，在kubernetes容器管理系统中，通常会搭配prometheus进行监控，同时也支持多种exporter采集数据，还支持pushgateway进行数据上报，Prometheus性能足够支撑上万台规模的集群。</p>
+</blockquote>
+<h3 id="1-1-拉取镜像">1.1 拉取镜像</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull prom/prometheus</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-创建映射目录">1.2 创建映射目录</h3>
+<p>用户可以自定义路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /opt/prometheus/</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-创建映射文件">1.3 创建映射文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">touch</span> -f /opt/prometheus/prometheus.yml</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-运行容器，目的是获取里面的配置文件">1.4 运行容器，目的是获取里面的配置文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name prometheus prom/prometheus</span><br></pre></td></tr></table></figure>
+<h3 id="1-5-复制文件">1.5 复制文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">cp</span> prometheus:/etc/prometheus/prometheus.yml /opt/prometheus/prometheus.yml</span><br></pre></td></tr></table></figure>
+<h3 id="1-6-删除镜像">1.6 删除镜像</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> -f prometheus</span><br></pre></td></tr></table></figure>
+<h3 id="1-7-创建容器">1.7 创建容器</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">-p 9090:9090 \</span><br><span class="line">--restart always \</span><br><span class="line">-v /opt/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">-e TZ=Asia/Shanghai \</span><br><span class="line">--name prometheus \</span><br><span class="line">prom/prometheus</span><br></pre></td></tr></table></figure>
+<h3 id="1-8-测试（自己本地ip加你部署的端口号，注意防火墙或安全组等）">1.8 测试（自己本地ip加你部署的端口号，注意防火墙或安全组等）</h3>
+<blockquote>
+<ul>
+<li><a target="_blank" rel="noopener" href="http://ip:9090/">http://ip:9090/</a></li>
+</ul>
+</blockquote>
+<h2 id="2-部署Grafana">2. 部署Grafana</h2>
+<blockquote>
+<p>Grafana 是一个可视化工具，简单点说就是用来展示数据的。它和Zabbix、Prometheus 有本质区别，在于它不能解决监控问题，仅用于展示。也就是说，在监控领域，Grafana 需要配合 Zabbix、Prometheus 等工具一起使用，以获取数据源。<br>
+Grafana 官方是这么介绍 Grafana 的：grafana是用于可视化大型测量数据的开源程序，他提供了强大和优雅的方式去创建、共享、浏览数据。dashboard中显示了你不同metric数据源中的数据。</p>
+</blockquote>
+<h3 id="2-1-拉取镜像">2.1 拉取镜像</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull grafana/grafana</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-创建映射目录-（给他个权限，不给的话好像有报错）">2.2 创建映射目录 （给他个权限，不给的话好像有报错）</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> /opt/grafana &amp;&amp; <span class="built_in">chmod</span> 777 /opt/grafana</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-运行一把容器">2.3 运行一把容器</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">-p 3000:3000 \</span><br><span class="line">--restart always \</span><br><span class="line">-e TZ=Asia/Shanghai \</span><br><span class="line">-v /opt/grafana:/var/lib/grafana \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">--name=grafana \</span><br><span class="line">grafana/grafana</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-测试">2.4 测试</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://ip:3000/">http://ip:3000/</a><br>
+初始化密码，第一次登陆用户和密码都是admin，登陆成功需要修改。</p>
+</blockquote>
+<h2 id="3-部署cadvisor">3. 部署cadvisor</h2>
+<blockquote>
+<p>cAdvisor 是谷歌公司用来分析运行中的 Docker 容器的资源占用以及性能特性的工具。</p>
+</blockquote>
+<h3 id="3-1-启动">3.1 启动</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">sudo docker run \</span><br><span class="line">--privileged=<span class="literal">true</span> \</span><br><span class="line">--restart always \</span><br><span class="line">--name cadvisor  \</span><br><span class="line">--volume=/:/rootfs:ro \</span><br><span class="line">--volume=/var/run:/var/run:ro \</span><br><span class="line">--volume=/sys:/sys:ro \</span><br><span class="line">--volume=/dev/disk/:/dev/disk:ro \</span><br><span class="line">--volume=/var/lib/docker/:/var/lib/docker:ro \</span><br><span class="line">--publish=8081:8080 \</span><br><span class="line">--detach=<span class="literal">true</span> \</span><br><span class="line">--name=cadvisor \</span><br><span class="line">google/cadvisor:latest</span><br></pre></td></tr></table></figure>
+<h3 id="3-2-cadvisor集成prometheus">3.2 cadvisor集成prometheus</h3>
+<h4 id="3-2-1-编辑prometheus配置文件">3.2.1 编辑prometheus配置文件</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /opt/prometheus/prometheus.yml</span><br></pre></td></tr></table></figure>
+<p>添加如下配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">&quot;cadvisor&quot;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment"># metrics_path defaults to &#x27;/metrics&#x27;</span></span><br><span class="line">   <span class="comment"># scheme defaults to &#x27;http&#x27;.</span></span><br><span class="line"></span><br><span class="line">   <span class="attr">static_configs:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="attr">targets:</span> [<span class="string">&quot;10.110.115.62:8081&quot;</span>]  <span class="comment"># 服务器地址+ip</span></span><br></pre></td></tr></table></figure>
+<h4 id="3-2-2-重启容器">3.2.2 重启容器</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker  restart prometheus</span><br></pre></td></tr></table></figure>
+<h4 id="3-2-3-测试，访问8081端口">3.2.3 测试，访问8081端口</h4>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://ip:8081/">http://ip:8081/</a></p>
+</blockquote>
+<h2 id="4-部署node-exporter">4. 部署node-exporter</h2>
+<blockquote>
+<p>采集主机的运行指标如CPU、内存、磁盘等信息</p>
+</blockquote>
+<h3 id="4-1-启动">4.1 启动</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line"> -p 9100:9100 \</span><br><span class="line">--name node-exporter \</span><br><span class="line">--restart=always \</span><br><span class="line">--net=<span class="string">&quot;host&quot;</span> \</span><br><span class="line">--pid=<span class="string">&quot;host&quot;</span> \</span><br><span class="line"> -e TZ=Asia/Shanghai \</span><br><span class="line">-v <span class="string">&quot;/proc:/host/proc:ro&quot;</span> \</span><br><span class="line">-v <span class="string">&quot;/sys:/host/sys:ro&quot;</span> \</span><br><span class="line">-v <span class="string">&quot;/:/rootfs:ro&quot;</span> \</span><br><span class="line">-v /etc/localtime:/etc/localtime \</span><br><span class="line">prom/node-exporter \</span><br><span class="line">--path.procfs=/host/proc \</span><br><span class="line">--path.rootfs=/rootfs \</span><br><span class="line">--path.sysfs=/host/sys \</span><br><span class="line">--collector.filesystem.ignored-mount-points=<span class="string">&#x27;^/(sys|proc|dev|host|etc)($$|/)&#x27;</span></span><br></pre></td></tr></table></figure>
+<h3 id="4-2-node-exporter集成prometheus">4.2 node-exporter集成prometheus</h3>
+<h4 id="4-2-1-编辑prometheus配置文件">4.2.1 编辑prometheus配置文件</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vi /home/prometheus/prometheus.yml</span><br></pre></td></tr></table></figure>
+<p>添加如下配置：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">&quot;node-exporter&quot;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment"># metrics_path defaults to &#x27;/metrics&#x27;</span></span><br><span class="line">   <span class="comment"># scheme defaults to &#x27;http&#x27;.</span></span><br><span class="line"></span><br><span class="line">   <span class="attr">static_configs:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="attr">targets:</span> [<span class="string">&quot;10.110.115.62:9100&quot;</span>]  <span class="comment"># 服务器地址+ip</span></span><br></pre></td></tr></table></figure>
+<h4 id="4-2-2-重启容器">4.2.2 重启容器</h4>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker  restart prometheus</span><br></pre></td></tr></table></figure>
+<h4 id="4-2-3-测试，访问9100端口">4.2.3 测试，访问9100端口</h4>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="http://ip:9100/">http://ip:9100/</a></p>
+</blockquote>
+<h3 id="4-3-Grafana配置模板-9276-8919-1860">4.3 Grafana配置模板 9276 8919 1860</h3>
+<h4 id="9276-选择node，这模板是监控主机信息的">9276  选择node，这模板是监控主机信息的</h4>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/promethues/9276.png" alt="9276"></p>
+<h4 id="8919">8919</h4>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/promethues/8919.png" alt="8919"></p>
+<h4 id="1860">1860</h4>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/promethues/1860.png" alt="1860"></p>
+<h2 id="5-部署mysql-exporter">5. 部署mysql-exporter</h2>
+<blockquote>
+<p>使用 mysqld_exporter来抓取mysql的一些指标信息</p>
+</blockquote>
+<h3 id="5-1-创建network">5.1 创建network</h3>
+<p>docker为容器创建独立的网络环境，实现宿主和容器、容器之间的网络隔离，默认使用bridge模式的网络，实现容器之间、容器与宿主机之间、乃至与外界之间 的网络通信。<br>
+但是我们在实际部署应用的时候，发现并不能直接通过容器内部端口访问另外一个容器的应用（比如：mysql容器端口是3306，web应用不能直接通过3306访问mysql），而是通过端口映射到宿主机器来实现容器之间的访问。<br>
+那么有什么方式能实现直接通过容器内部端口进行数据通讯呢？那就是通过network方式。<br>
+docker network创建一个桥接网络，在docker run的时候将容器指定到新创建的桥接网络中，这样同一桥接网络中的容器就可以通过互相访问。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network create  my-mysql-network</span><br></pre></td></tr></table></figure>
+<h3 id="5-2-查看network">5.2 查看network</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker network <span class="built_in">ls</span></span><br></pre></td></tr></table></figure>
+<h3 id="5-3-部署">5.3 部署</h3>
+<p>DATA_SOURCE_NAME ，配置账户名和密码、地址：端口号。应该专门配置一个监控账户。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">USER</span> <span class="string">&#x27;mysql_monitor&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span> IDENTIFIED <span class="keyword">BY</span> <span class="string">&#x27;Cmbjx@1918mhr&#x27;</span> <span class="keyword">WITH</span> MAX_USER_CONNECTIONS <span class="number">3</span>;</span><br><span class="line"><span class="keyword">GRANT</span> PROCESS, REPLICATION CLIENT, <span class="keyword">SELECT</span> <span class="keyword">ON</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">TO</span> <span class="string">&#x27;mysql_monitor&#x27;</span>@<span class="string">&#x27;localhost&#x27;</span>;</span><br><span class="line">FLUSH PRIVILEGES;</span><br><span class="line">EXIT</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">  --name mysql_exporter \</span><br><span class="line">  --restart always \</span><br><span class="line">  -p 9104:9104 \</span><br><span class="line">  --network my-mysql-network \</span><br><span class="line">  --network-alias mysql_exporter \</span><br><span class="line">  -e DATA_SOURCE_NAME=<span class="string">&quot;mysql_monitor:Cmbjx@1918mhr@(10.110.115.62:3307)/&quot;</span> \</span><br><span class="line">   -e TZ=Asia/Shanghai \</span><br><span class="line">   -v /etc/localtime:/etc/localtime \</span><br><span class="line">  prom/mysqld-exporter</span><br></pre></td></tr></table></figure>
+<h3 id="5-4-修改配置文件，集成Prometheus">5.4 修改配置文件，集成Prometheus</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">&quot;mysql-exporter&quot;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment"># metrics_path defaults to &#x27;/metrics&#x27;</span></span><br><span class="line">   <span class="comment"># scheme defaults to &#x27;http&#x27;.</span></span><br><span class="line"></span><br><span class="line">   <span class="attr">static_configs:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="attr">targets:</span> [<span class="string">&quot;10.110.115.62:9104&quot;</span>]  <span class="comment"># 服务器地址+ip</span></span><br></pre></td></tr></table></figure>
+<h3 id="5-5-配置模板-7362">5.5 配置模板 7362</h3>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/promethues/7362.png" alt="7362"></p>
+<h2 id="6-部署Redis-exporter">6. 部署Redis_exporter</h2>
+<h3 id="6-1-拉取镜像">6.1 拉取镜像</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull oliver006/redis_exporter</span><br></pre></td></tr></table></figure>
+<h3 id="6-2-部署">6.2 部署</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name  redis_exporter  --restart=always -p 9121:9121 oliver006/redis_exporter --redis.addr redis://192.168.153.102:6379</span><br></pre></td></tr></table></figure>
+<h3 id="6-3-配置Prometheus文件">6.3 配置Prometheus文件</h3>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">-</span> <span class="attr">job_name:</span> <span class="string">&quot;redis-exporter&quot;</span></span><br><span class="line"></span><br><span class="line">   <span class="comment"># metrics_path defaults to &#x27;/metrics&#x27;</span></span><br><span class="line">   <span class="comment"># scheme defaults to &#x27;http&#x27;.</span></span><br><span class="line"></span><br><span class="line">   <span class="attr">static_configs:</span></span><br><span class="line">     <span class="bullet">-</span> <span class="attr">targets:</span> [<span class="string">&quot;192.168.153.102:9121&quot;</span>]  <span class="comment"># 服务器地址+ip</span></span><br></pre></td></tr></table></figure>
+<h3 id="6-4-重启Prometheus，配置Grafana配置模板-763">6.4 重启Prometheus，配置Grafana配置模板  763</h3>
+<p><img src="https://jiangiiblog.oss-cn-beijing.aliyuncs.com/blog-images/promethues/763.png" alt="763"></p>
+
+    </div>
+
+    <div class="copyright-box">
+        <strong>Copyright Notice:</strong> All articles in this blog are licensed under <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> unless stating
+        additionally.
+    </div>
+
+    <div class="post-navigation">
+        
+            <a href="/2024/08/01/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6(PowerJob%E4%B8%8Exxl-job%E5%AF%B9%E6%AF%94)/" class="nav-prev">
+                <span class="nav-label">← 上一篇</span>
+                <span class="nav-title">
+                    分布式任务调度框架(PowerJob与xxl-job对比)
+                </span>
+            </a>
+            
+
+                    
+                        <a href="/2024/07/01/%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%90%AD%E5%BB%BAPrometheus%E7%9B%91%E6%8E%A7%E4%BD%93%E7%B3%BB/" class="nav-next">
+                            <span class="nav-label">下一篇 →</span>
+                            <span class="nav-title">
+                                二进制搭建Prometheus监控体系
+                            </span>
+                        </a>
+                        
+    </div>
+</article>
+
+        <div class="global-footer">
+            &copy; 2026 阿一.<br>
+                    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.
+        </div>
+
+        
+
+                    <script>
+                        const themeToggleBtn = document.getElementById('theme-toggle');
+                        themeToggleBtn.addEventListener('click', () => {
+                            const html = document.documentElement;
+                            if (html.getAttribute('data-theme') === 'dark') {
+                                html.removeAttribute('data-theme');
+                                localStorage.setItem('theme', 'light');
+                            } else {
+                                html.setAttribute('data-theme', 'dark');
+                                localStorage.setItem('theme', 'dark');
+                            }
+                        });
+                    </script>
+</body>
+
+</html>
