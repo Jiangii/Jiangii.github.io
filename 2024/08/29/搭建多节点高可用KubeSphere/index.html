@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Linux搭建多节点高可用KubeSphere - 阿一的学习笔记</title>
+    <meta name="description" content="">
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+                <script>
+                    const userPref = localStorage.getItem('theme');
+                    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (userPref === 'dark' || (!userPref && systemDark)) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                </script>
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body class="is-post">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div style="position: fixed; top: 24px; left: 24px; z-index: 100;">
+    <a href="/" class="back-btn">
+        <svg class="svg-icon" style="vertical-align: middle; margin-right: 4px; width: 16px; height: 16px;"
+            viewBox="0 0 24 24">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        放回桌面
+    </a>
+</div>
+
+<!-- 卡片 -->
+<article class="post-container module"
+    style="position: relative; margin: 80px auto 40px auto; transform: none; max-width: 800px; width: 90%; cursor: auto;">
+    <h1 style="font-size: 28px; margin-bottom: 8px;">Linux搭建多节点高可用KubeSphere</h1>
+    <div class="post-meta" style="margin-bottom: 32px;">
+        发布于 2024.08.29
+            
+    </div>
+
+    <!-- 正文 -->
+    <div class="post-content">
+        <p>KubeSphere官方文档：<a target="_blank" rel="noopener" href="https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/">https://kubesphere.io/zh/docs/v3.4/installing-on-linux/high-availability-configurations/internal-ha-configuration/</a><br>
+<img src="../kubesphere/kube1.png" alt="image.png"></p>
+<h2 id="环境准备">环境准备</h2>
+<h3 id="Docker安装">Docker安装</h3>
+<p>您的集群必须有一个可用的容器运行时。如果您使用 KubeKey 搭建集群，KubeKey 会默认安装最新版本的 Docker。或者，您也可以在创建集群前手动安装 Docker 或其他容器运行时。</p>
+<h3 id="依赖项准备">依赖项准备</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">export KKZONE=cn</span><br><span class="line"></span><br><span class="line">#准备所需依赖环境</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install conntrack socat chrony ipset ebtables</span><br></pre></td></tr></table></figure>
+<p><img src="../kubesphere/kube2.png" alt="image.png"></p>
+<blockquote>
+<p>当sudo apt-get update报错</p>
+</blockquote>
+<p><img src="../kubesphere/kube3.png" alt="image.png"></p>
+<p>搜索了一下，大多数回答是说镜像错了，需要换镜像，但是测试后发现还是错误的，经过调研，发现那些回答都有问题，只是说要换源，没有说明镜像源要和系统版本一致，所以导致换了他们的源后还是错误的：<br>
+例如：输入指令lsb_release -a 查看ubuntu的系统版本，在这里我的系统是22.04.3 LTS，注意后面的jammy这一个版本非常重要。</p>
+<p><img src="../kubesphere/kube4.png" alt="image.png"><br>
+查看阿里的镜像网站<a target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/ubuntu">https://developer.aliyun.com/mirror/ubuntu</a>，发现有三个不一样的源，所以failed to fetch的 原因是镜像源和系统版本对不上 ，所以出现下载错误。<br>
+编辑相关配置内容vim /etc/apt/sources.list，更换源，一定要选择与Codename对应的源地址</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-security main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-updates main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-proposed main restricted universe multiverse</span><br><span class="line"></span><br><span class="line">deb https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br><span class="line">deb-src https://mirrors.aliyun.com/ubuntu/ jammy-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<p>若是还不行，添加Google 提供的公共 DNS 服务器的 IP 地址 8.8.8.8。<br>
+直接在 /etc/resolv.conf 文件后面追加命令（修改文件 sudo vi /etc/resolv.conf）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;nameserver 8.8.8.8&quot; &gt;&gt; /etc/resolv.conf</span><br><span class="line">echo &quot;nameserver 114.114.114.114&quot; &gt;&gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">chmod</span> +x /etc/apt/run.sh  </span><br><span class="line">/etc/apt/run.sh</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 8.8.8.8&quot;</span> &gt;&gt; /etc/resolv.conf</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;nameserver 114.114.114.114&quot;</span> &gt;&gt; /etc/resolv.conf</span><br></pre></td></tr></table></figure>
+<h2 id="下载KubeKey">下载KubeKey</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(Ubuntu把sh换为bash)</span><br><span class="line">curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 sh -</span><br><span class="line">curl -sfL https://get-kk.kubesphere.io | VERSION=v3.0.13 bash -</span><br><span class="line"></span><br><span class="line">chmod +x kk</span><br></pre></td></tr></table></figure>
+<h2 id="创建集群">创建集群</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"># 查看版本</span><br><span class="line">./kk version --show-supported-k8s</span><br><span class="line"></span><br><span class="line"># 创建配置文件</span><br><span class="line">./kk create config --with-kubesphere v3.4.1 --with-kubernetes v1.23.10</span><br><span class="line"></span><br><span class="line"># 开始安装（多节点）</span><br><span class="line">./kk create cluster -f config-sample.yaml</span><br><span class="line"></span><br><span class="line"># 单节点直接启动这个./kk create cluster --with-kubernetes v1.23.10 --with-kubesphere v3.4.1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 瞅瞅日志先啦</span><br><span class="line">kubectl logs -n kubesphere-system $(kubectl get pod -n kubesphere-system -l &#x27;app in (ks-install, ks-installer)&#x27; -o jsonpath=&#x27;&#123;.items[0].metadata.name&#125;&#x27;) -f</span><br><span class="line"></span><br><span class="line"># 之前超时的错误看到是443端口超时</span><br><span class="line">ufw status</span><br><span class="line">ufw allow 443</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ul>
+<li>安装 KubeSphere 3.4 的建议 Kubernetes 版本：v1.20.x、v1.21.x、v1.22.x、v1.23.x、* v1.24.x、* v1.25.x 和 * v1.26.x。带星号的版本可能出现边缘节点部分功能不可用的情况。因此，如需使用边缘节点，推荐安装 v1.23.x。如果不指定 Kubernetes 版本，KubeKey 将默认安装 Kubernetes v1.23.10。</li>
+<li>如果您在这一步的命令中不添加标志 --with-kubesphere，则不会部署 KubeSphere，只能使用配置文件中的 addons 字段安装，或者在您后续使用 ./kk create cluster 命令时再次添加这个标志。</li>
+<li>如果您添加标志 --with-kubesphere 时不指定 KubeSphere 版本，则会安装最新版本的 KubeSphere。</li>
+</ul>
+</blockquote>
+<p><img src="../kubesphere/kube5.png" alt="image.png"></p>
+<p><img src="../kubesphere/kube6.png" alt="image.png"></p>
+<p><img src="../kubesphere/kube7.png" alt="image.png"></p>
+<p><img src="../kubesphere/kube8.png" alt="image.png"></p>
+<p>报错<br>
+<img src="../kubesphere/kube9.png" alt="image.png"></p>
+<p>也能进去，但是登录报错<br>
+<img src="../kubesphere/kube10.png" alt="image.png"></p>
+<p><img src="../kubesphere/kube11.png" alt="image.png"></p>
+<p>编辑coredns配置<br>
+kubectl get configmap coredns -n kube-system -o yaml<br>
+kubectl edit cm coredns -n kube-system<br>
+重启server<br>
+kubectl -n kubesphere-system rollout restart deploy/ks-apiserver</p>
+
+    </div>
+
+    <div class="copyright-box">
+        <strong>Copyright Notice:</strong> All articles in this blog are licensed under <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> unless stating
+        additionally.
+    </div>
+
+    <div class="post-navigation">
+        
+            <a href="/2024/08/29/%E6%95%B0%E6%8D%AE%E5%B9%B3%E5%8F%B0%E8%B0%83%E5%BA%A6%E6%96%B9%E6%A1%88/" class="nav-prev">
+                <span class="nav-label">← 上一篇</span>
+                <span class="nav-title">
+                    数据平台调度方案
+                </span>
+            </a>
+            
+
+                    
+                        <a href="/2024/08/29/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BB%BB%E5%8A%A1%E8%B0%83%E5%BA%A6%E6%A1%86%E6%9E%B6(PowerJob%E4%B8%8Exxl-job%E5%AF%B9%E6%AF%94)/" class="nav-next">
+                            <span class="nav-label">下一篇 →</span>
+                            <span class="nav-title">
+                                分布式任务调度框架(PowerJob与xxl-job对比)
+                            </span>
+                        </a>
+                        
+    </div>
+</article>
+
+        <div class="global-footer">
+            &copy; 2026 阿一.<br>
+                    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.
+        </div>
+
+        
+
+                    <script>
+                        const themeToggleBtn = document.getElementById('theme-toggle');
+                        themeToggleBtn.addEventListener('click', () => {
+                            const html = document.documentElement;
+                            if (html.getAttribute('data-theme') === 'dark') {
+                                html.removeAttribute('data-theme');
+                                localStorage.setItem('theme', 'light');
+                            } else {
+                                html.setAttribute('data-theme', 'dark');
+                                localStorage.setItem('theme', 'dark');
+                            }
+                        });
+                    </script>
+</body>
+
+</html>

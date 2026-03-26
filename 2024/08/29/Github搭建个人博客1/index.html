@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Github搭建个人博客（一） - 阿一的学习笔记</title>
+    <meta name="description" content="">
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+        
+                <script>
+                    const userPref = localStorage.getItem('theme');
+                    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    if (userPref === 'dark' || (!userPref && systemDark)) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                </script>
+<meta name="generator" content="Hexo 7.2.0"></head>
+
+<body class="is-post">
+    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle Theme">
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+    </button>
+
+    <div style="position: fixed; top: 24px; left: 24px; z-index: 100;">
+    <a href="/" class="back-btn">
+        <svg class="svg-icon" style="vertical-align: middle; margin-right: 4px; width: 16px; height: 16px;"
+            viewBox="0 0 24 24">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        放回桌面
+    </a>
+</div>
+
+<!-- 卡片 -->
+<article class="post-container module"
+    style="position: relative; margin: 80px auto 40px auto; transform: none; max-width: 800px; width: 90%; cursor: auto;">
+    <h1 style="font-size: 28px; margin-bottom: 8px;">Github搭建个人博客（一）</h1>
+    <div class="post-meta" style="margin-bottom: 32px;">
+        发布于 2024.08.29
+            
+    </div>
+
+    <!-- 正文 -->
+    <div class="post-content">
+        <p>本人在大学里浑浑噩噩的过了四年，因为疫情封了3年，从2019年12月到2022年12月放开，可以说这个大学上的很没有体验啊。<br>
+2023年毕业工作以后一直想搭一个自己的博客，把工作上学到的用到的记录下来，也算是见证了自己的成长，那么第一篇就从如何使用Github Pages 搭建个人博客开始吧o(<em>￣▽￣</em>)ブ</p>
+<h2 id="前言">前言</h2>
+<h3 id="Github-Pages">Github Pages</h3>
+<p>GitHub Pages 是由 GitHub 官方提供的一种免费的静态站点托管服务，让我们可以在 GitHub 仓库里托管和发布自己的静态网站页面。</p>
+<h3 id="Hexo">Hexo</h3>
+<p>有大佬将博客的功能（比如文章管理）抽象出来，做成了站点生成器 ，可以用极少的&quot;命令&quot; + &quot;配置文件&quot;的方式，自动生成精美的博客网站。主流的博客主要分静态博客和动态博客两类，所谓动态，就是指有前端有后端，可以登录到后台进行管理。静态博客是纯前端的展示，没有后端。</p>
+<ul>
+<li>动态博客生成器：WordPress、FarBox、Ghost等</li>
+<li>静态博客生成器：Hexo、Jekyll、Octopress、Hugo等</li>
+</ul>
+<blockquote>
+<p>Hexo是一个快速、简洁且高效的博客框架，用于创建和管理静态网站和博客，可以在几秒钟内从数百个文件生成静态网页<br>
+官网： <a target="_blank" rel="noopener" href="https://hexo.io/">hexo.io</a><br>
+官方详细部署文档： <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">文档|hexo</a></p>
+</blockquote>
+<h2 id="准备GitHub">准备GitHub</h2>
+<h3 id="1-注册Github">1.注册Github</h3>
+<p>首先注册一个自己的Github账户 <a target="_blank" rel="noopener" href="https://github.com/">官网 | Github</a></p>
+<blockquote>
+<p>如果Github界面打不开，请自行开启梯子</p>
+</blockquote>
+<h3 id="创建Github仓库">创建Github仓库</h3>
+<p>注册之后，接下来创建自己的仓库</p>
+<ul>
+<li>
+<p>首先点击[New]<br>
+<img src="../graph/GitHub1.jpg" alt="图片"></p>
+</li>
+<li>
+<p>然后创建仓库时，仓库名一定要以[你的用户名].github.io 为名<br>
+<img src="../graph/Github2.jpg" alt="图片"><br>
+<img src="../graph/GitHub3.jpg" alt="图片"></p>
+</li>
+<li>
+<p>创建成功后，可以在仓库项目[Settings]查看相关设置，如果名字一开始没有按照格式设置，可以重新修改<br>
+<img src="../graph/Github4.jpg" alt="图片"></p>
+</li>
+<li>
+<p>访问我们的默认界面（<a target="_blank" rel="noopener" href="http://xn--eqr924avxo.github.io">用户名.github.io</a>）<br>
+<img src="../graph/Github5.jpg" alt="图片"></p>
+</li>
+</ul>
+<h2 id="本地构建Hexo">本地构建Hexo</h2>
+<p>官方详细部署文档： <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">文档|hexo</a></p>
+<h3 id="安装Node-js">安装Node.js</h3>
+<ol>
+<li>进入<a target="_blank" rel="noopener" href="https://nodejs.org/en/download">node.js</a>官网，下载exe安装包</li>
+<li>双击安装包，默认点击下一步进行安装（确保勾选Add to PATH选项）</li>
+<li>安装成功后进入终端输入npm --version显示版本号则说明安装成功</li>
+</ol>
+<h3 id="安装Git">安装Git</h3>
+<ol>
+<li>进入<a target="_blank" rel="noopener" href="https://git-scm.com/download/win">git</a>官网，下载exe安装包</li>
+<li>双击安装包，默认点击下一步进行安装（确保勾选Add to PATH选项）</li>
+<li>安装成功后进入终端输入git --version显示版本号则说明安装成功</li>
+</ol>
+<h3 id="安装Hexo">安装Hexo</h3>
+<p>所有必备的应用程序安装完成后，即可使用 npm 安装 Hexo</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<p>进阶安装和使用<br>
+对于熟悉 npm 的进阶用户，可以仅局部安装 hexo 包</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo</span><br></pre></td></tr></table></figure>
+<p>安装以后，可以使用以下两种方式执行 Hexo：</p>
+<blockquote>
+<ol>
+<li>npx hexo 命令</li>
+<li>Linux 用户可以将 Hexo 所在的目录下的 node_modules 添加到环境变量之中即可直接使用 hexo <command><br>
+echo ‘PATH=“$PATH:./node_modules/.bin”’ &gt;&gt; ~/.profile<br>
+安装成功后输入hexo --version显示版本号则说明安装成功</li>
+</ol>
+</blockquote>
+<h2 id="Hexo项目部署到Github-Pages">Hexo项目部署到Github Pages</h2>
+<h3 id="初始化hexo">初始化hexo</h3>
+<ul>
+<li>在本地新建一个文件夹 e:/hexo，进入终端，在目标目录下输入以下命令<br>
+右击文件夹，open Git Bash here<br>
+<img src="../graph/hexo1.jpg" alt="图片"></li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npx hexo init</span><br></pre></td></tr></table></figure>
+<p><img src="../graph/hexo2.jpg" alt="图片"></p>
+<ul>
+<li>构建完成后，目录结构如下（）<br>
+<img src="../graph/hexo3.jpg" alt="图片"></li>
+</ul>
+<h3 id="预览效果">预览效果</h3>
+<p>hexo的相关命令可以自行学习</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ npx hexo clean  <span class="comment">#清除缓存</span></span><br><span class="line">$ npx hexo generate 简写 npx hexo g  <span class="comment">#生成页面</span></span><br><span class="line">$ npx hexo server 简写 npx hexo s  <span class="comment">#启动服务</span></span><br><span class="line">$ npx hexo deploy 简写 npx hexo d  <span class="comment">#部署</span></span><br><span class="line">$ ...</span><br></pre></td></tr></table></figure>
+<p><img src="../graph/hexo4.jpg" alt="图片"><br>
+<img src="../graph/hexo5.jpg" alt="图片"></p>
+<h3 id="部署到Github">部署到Github</h3>
+<ul>
+<li>安装git提交依赖</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>修改_config.yml文件中deploy和url配置项，写入以下内容<br>
+<img src="../graph/hexo6.jpg" alt="图片"></p>
+</li>
+<li>
+<p>本地连接Github</p>
+</li>
+<li>
+<p>提交到Github</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npx hexo d -g</span><br></pre></td></tr></table></figure>
+<p><img src="../graph/deploy.jpg" alt="图片"></p>
+<ul>
+<li>访问username.github.io查看个人博客网站<br>
+<img src="../graph/myindex.jpg" alt="图片"></li>
+</ul>
+<h2 id="写在后面">写在后面</h2>
+<p>关于Hexo如何使用,以及如何个性化自己的博客网站,请看下一篇文章</p>
+
+    </div>
+
+    <div class="copyright-box">
+        <strong>Copyright Notice:</strong> All articles in this blog are licensed under <a
+            href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">BY-NC-SA</a> unless stating
+        additionally.
+    </div>
+
+    <div class="post-navigation">
+        
+            <a href="/2024/08/29/Mysql%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9A%E8%BF%81%E7%A7%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%87%B4%E5%8F%A6%E4%B8%80%E5%8F%B0%E6%9C%8D%E5%8A%A1%E5%99%A8/" class="nav-prev">
+                <span class="nav-label">← 上一篇</span>
+                <span class="nav-title">
+                    Mysql数据库：迁移数据库致另一台服务器
+                </span>
+            </a>
+            
+
+                    
+                        <a href="/2024/08/29/Docker%E9%83%A8%E7%BD%B2Skywalking/" class="nav-next">
+                            <span class="nav-label">下一篇 →</span>
+                            <span class="nav-title">
+                                Docker部署Skywalking
+                            </span>
+                        </a>
+                        
+    </div>
+</article>
+
+        <div class="global-footer">
+            &copy; 2026 阿一.<br>
+                    Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>.
+        </div>
+
+        
+
+                    <script>
+                        const themeToggleBtn = document.getElementById('theme-toggle');
+                        themeToggleBtn.addEventListener('click', () => {
+                            const html = document.documentElement;
+                            if (html.getAttribute('data-theme') === 'dark') {
+                                html.removeAttribute('data-theme');
+                                localStorage.setItem('theme', 'light');
+                            } else {
+                                html.setAttribute('data-theme', 'dark');
+                                localStorage.setItem('theme', 'dark');
+                            }
+                        });
+                    </script>
+</body>
+
+</html>
